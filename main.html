@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buffet em Bangu | Buffet Elegance - Eventos Inesquecíveis</title>
+    <meta name="description" content="O melhor buffet em Bangu para casamentos, festas e eventos corporativos. Gastronomia de alta qualidade e atendimento impecável no Rio de Janeiro.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <div class="logo">Buffet Elegance <small style="font-size: 0.6rem; display: block; letter-spacing: 1px; color: var(--gold);">Bangu - RJ</small></div>
+            
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="javascript:void(0)" id="openMenuNav">Cardápio</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-right">
+                <a href="javascript:void(0)" class="login-btn" id="openLogin" title="Área do Proprietário">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Login</span>
+                </a>
+
+                <!-- Menu Hambúrguer -->
+                <label for="menu-toggle" class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeLogin">&times;</span>
+            <div class="modal-header">
+                <h2>Acesso Restrito</h2>
+                <p>Área do Proprietário</p>
+            </div>
+            <form class="login-form">
+                <div class="input-group">
+                    <label>Usuário</label>
+                    <input type="text" placeholder="Seu usuário" required>
+                </div>
+                <div class="input-group">
+                    <label>Senha</label>
+                    <input type="password" placeholder="Sua senha" required>
+                </div>
+                <button type="submit" class="btn">Entrar no Painel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Cardápio -->
+    <div id="menuModal" class="modal">
+        <div class="modal-content menu-modal-content">
+            <span class="close-modal" id="closeMenu">&times;</span>
+            <div class="modal-header">
+                <h2>Nosso Cardápio</h2>
+                <p>Experiências Gastronômicas</p>
+            </div>
+            
+            <div class="menu-categories">
+                <div class="menu-category">
+                    <h3>Entradas</h3>
+                    <ul>
+                        <li>
+                            <span>Canapés de Salmão Defumado</span>
+                            <p>Com cream cheese e raspas de limão siciliano.</p>
+                        </li>
+                        <li>
+                            <span>Bruschettas de Cogumelos</span>
+                            <p>Mix de cogumelos frescos com azeite de trufas.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    <h3>Pratos Principais</h3>
+                    <ul>
+                        <li>
+                            <span>Filé Mignon ao Molho Madeira</span>
+                            <p>Acompanhado de risoto de parmesão.</p>
+                        </li>
+                        <li>
+                            <span>Salmão Grelhado com Ervas</span>
+                            <p>Com purê de mandioquinha e legumes grelhados.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    <h3>Sobremesas</h3>
+                    <ul>
+                        <li>
+                            <span>Petit Gâteau de Chocolate Belga</span>
+                            <p>Com sorvete artesanal de baunilha.</p>
+                        </li>
+                        <li>
+                            <span>Cheesecake de Frutas Vermelhas</span>
+                            <p>Com calda artesanal e base crocante.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="menu-footer">
+                <p>* Cardápios personalizados disponíveis sob consulta.</p>
+                <a href="#contato" class="btn" id="closeMenuToContact">SOLICITAR ORÇAMENTO</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="home" class="hero">
+        <div class="hero-content container">
+            <h1>O Melhor Buffet em Bangu</h1>
+            <p>Sabor, elegância e experiências gastronômicas inesquecíveis para o seu evento na Zona Oeste do Rio.</p>
+            <div class="hero-btns">
+                <a href="#contato" class="btn">FAÇA SEU ORÇAMENTO</a>
+                <a href="javascript:void(0)" class="btn btn-outline" id="openMenuHero">CARDÁPIO</a>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section id="sobre" class="container">
+            <h2 class="section-title">Buffet em Bangu</h2>
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80" alt="Gastronomia Fina em Bangu">
+                </div>
+                <div class="about-content">
+                    <p>Com mais de uma década dedicada à alta gastronomia, o <strong>Buffet Elegance</strong> é referência quando se busca um <strong>buffet em Bangu</strong> que une sofisticação e sabor.</p>
+                    <p>Localizado no coração de Bangu, nossa missão é transformar cada celebração em um marco inesquecível. Acreditamos que cada detalhe importa, desde a escolha dos ingredientes até o atendimento impecável da nossa equipe.</p>
+                    <p>Seja para um casamento clássico, uma festa vibrante ou um evento corporativo, somos a escolha ideal para quem busca excelência na Zona Oeste do Rio de Janeiro.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="servicos">
+            <div class="container">
+                <h2 class="section-title">Nossos Serviços</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 10c2 0 5-1 5-4s-3-4-5-4-5 1-5 4 3 4 5 4Z"/>
+                                <path d="M12 10c-2 0-5 1-5 4s3 4 5 4 5-1 5-4-3-4-5-4Z"/>
+                                <path d="M12 22v-4"/>
+                                <path d="M12 18c-4 0-8-2-8-5 0-2 2-3 4-3"/>
+                                <path d="M12 18c4 0 8-2 8-5 0-2-2-3-4-3"/>
+                            </svg>
+                        </div>
+                        <h3>Casamentos</h3>
+                        <p>Onde o "sim" encontra o banquete dos sonhos com elegância atemporal.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" />
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                            </svg>
+                        </div>
+                        <h3>Corporativo</h3>
+                        <p>Excelência e profissionalismo traduzidos em sabores que impressionam parceiros e clientes.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/>
+                                <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/>
+                                <path d="M2 21h20"/>
+                                <path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/>
+                                <path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/>
+                            </svg>
+                        </div>
+                        <h3>Festas</h3>
+                        <p>Celebrações vibrantes com cardápios criativos que encantam todas as gerações.</p>
+                    </div>
+                </div>
+                <div class="services-action">
+                    <a href="javascript:void(0)" class="btn btn-outline btn-services" id="openMenu">VEJA NOSSO CARDÁPIO</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="container">
+            <div class="contact-new-card">
+                <h2>Pronto para planejar sua próxima experiência?</h2>
+                <p>Nossa equipe está à disposição para criar um orçamento personalizado que atenda perfeitamente às suas expectativas e necessidades.</p>
+                
+                <a href="https://wa.me/5521976714721" target="_blank" class="btn-solicitar">SOLICITAR ORÇAMENTO</a>
+
+                <div class="whatsapp-contact">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <span>Fale conosco pelo WhatsApp</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const loginModal = document.getElementById('loginModal');
+        const menuModal = document.getElementById('menuModal');
+        
+        const openLogin = document.getElementById('openLogin');
+        const closeLogin = document.getElementById('closeLogin');
+        
+        const openMenu = document.getElementById('openMenu');
+        const openMenuNav = document.getElementById('openMenuNav');
+        const openMenuHero = document.getElementById('openMenuHero');
+        const closeMenu = document.getElementById('closeMenu');
+        const closeMenuToContact = document.getElementById('closeMenuToContact');
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        // Login Modal
+        if (openLogin) {
+            openLogin.onclick = function() {
+                loginModal.style.display = "flex";
+                document.body.style.overflow = "hidden";
+            }
+        }
+        if (closeLogin) {
+            closeLogin.onclick = function() {
+                loginModal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        // Menu Modal
+        const handleOpenMenu = function() {
+            menuModal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+            if (menuToggle) menuToggle.checked = false;
+        }
+
+        if (openMenu) openMenu.onclick = handleOpenMenu;
+        if (openMenuNav) openMenuNav.onclick = handleOpenMenu;
+        if (openMenuHero) openMenuHero.onclick = handleOpenMenu;
+
+        if (closeMenu) {
+            closeMenu.onclick = function() {
+                menuModal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+        if (closeMenuToContact) {
+            closeMenuToContact.onclick = function() {
+                menuModal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        // Fechar menu mobile ao clicar em links
+        navLinks.forEach(link => {
+            link.onclick = function() {
+                if (menuToggle) menuToggle.checked = false;
+            }
+        });
+
+        // Global Close
+        window.onclick = function(event) {
+            if (event.target == loginModal) {
+                loginModal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+            if (event.target == menuModal) {
+                menuModal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        // Form Submit
+        document.querySelectorAll('form').forEach(form => {
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                alert('Solicitação enviada com sucesso! Entraremos em contato.');
+                this.reset();
+                if (loginModal) loginModal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        });
+
+        // Phone Mask
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+                let formattedValue = '';
+                if (value.length > 0) {
+                    formattedValue = '(' + value.slice(0, 2);
+                    if (value.length > 2) {
+                        formattedValue += ') ' + value.slice(2, 7);
+                        if (value.length > 7) {
+                            formattedValue += '-' + value.slice(7, 11);
+                        }
+                    }
+                }
+                e.target.value = formattedValue;
+            });
+        }
+    </script>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Buffet Elegance</p>
+            <p>(21) 97671-4721</p>
+        </div>
+    </footer>
+
+</body>
+</html>
