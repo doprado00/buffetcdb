@@ -46,23 +46,41 @@
 
     <!-- Modal de Login -->
     <div id="loginModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content login-modal-content">
             <span class="close-modal" id="closeLogin">&times;</span>
             <div class="modal-header">
+                <div class="modal-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
                 <h2>Acesso Restrito</h2>
-                <p>Área do Proprietário</p>
+                <p>Identifique-se para gerenciar o sistema</p>
             </div>
-            <form class="login-form">
+            <form id="loginForm" class="login-form">
                 <div class="input-group">
                     <label>Usuário</label>
-                    <input type="text" placeholder="Seu usuário" required>
+                    <div class="input-with-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <input type="text" id="username" placeholder="Digite seu usuário" required>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>Senha</label>
-                    <input type="password" placeholder="Sua senha" required>
+                    <div class="input-with-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <input type="password" id="password" placeholder="Digite sua senha" required>
+                        <button type="button" id="togglePassword" class="toggle-password" title="Mostrar/Ocultar senha">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" class="btn">Entrar no Painel</button>
+                <button type="submit" class="btn btn-login">ENTRAR NO PAINEL</button>
             </form>
+            <div id="loginError" class="login-error" style="display: none;"></div>
         </div>
     </div>
 
@@ -72,48 +90,57 @@
             <span class="close-modal" id="closeMenu">&times;</span>
             <div class="modal-header">
                 <h2>Nosso Cardápio</h2>
-                <p>Experiências Gastronômicas</p>
+                <p id="menuSubtitle">Experiências Gastronômicas</p>
             </div>
             
-            <div class="menu-categories">
+            <div id="ownerControls" class="owner-controls" style="display: none;">
+                <button id="editMenuBtn" class="btn-admin">✏️ EDITAR CARDÁPIO</button>
+                <button id="saveMenuBtn" class="btn-admin btn-save" style="display: none;">✅ SALVAR ALTERAÇÕES</button>
+                <button id="cancelEditBtn" class="btn-admin btn-cancel" style="display: none;">❌ CANCELAR</button>
+            </div>
+            
+            <div id="menuFeedback" class="menu-feedback" style="display: none;"></div>
+
+            <div class="menu-categories" id="menuContainer">
+                <!-- O cardápio será carregado dinamicamente aqui -->
                 <div class="menu-category">
                     <h3>Entradas</h3>
-                    <ul>
+                    <ul class="menu-list" data-category="entradas">
                         <li>
-                            <span>Canapés de Salmão Defumado</span>
-                            <p>Com cream cheese e raspas de limão siciliano.</p>
+                            <span class="item-name">Canapés de Salmão Defumado</span>
+                            <p class="item-desc">Com cream cheese e raspas de limão siciliano.</p>
                         </li>
                         <li>
-                            <span>Bruschettas de Cogumelos</span>
-                            <p>Mix de cogumelos frescos com azeite de trufas.</p>
+                            <span class="item-name">Bruschettas de Cogumelos</span>
+                            <p class="item-desc">Mix de cogumelos frescos com azeite de trufas.</p>
                         </li>
                     </ul>
                 </div>
 
                 <div class="menu-category">
                     <h3>Pratos Principais</h3>
-                    <ul>
+                    <ul class="menu-list" data-category="principais">
                         <li>
-                            <span>Filé Mignon ao Molho Madeira</span>
-                            <p>Acompanhado de risoto de parmesão.</p>
+                            <span class="item-name">Filé Mignon ao Molho Madeira</span>
+                            <p class="item-desc">Acompanhado de risoto de parmesão.</p>
                         </li>
                         <li>
-                            <span>Salmão Grelhado com Ervas</span>
-                            <p>Com purê de mandioquinha e legumes grelhados.</p>
+                            <span class="item-name">Salmão Grelhado com Ervas</span>
+                            <p class="item-desc">Com purê de mandioquinha e legumes grelhados.</p>
                         </li>
                     </ul>
                 </div>
 
                 <div class="menu-category">
                     <h3>Sobremesas</h3>
-                    <ul>
+                    <ul class="menu-list" data-category="sobremesas">
                         <li>
-                            <span>Petit Gâteau de Chocolate Belga</span>
-                            <p>Com sorvete artesanal de baunilha.</p>
+                            <span class="item-name">Petit Gâteau de Chocolate Belga</span>
+                            <p class="item-desc">Com sorvete artesanal de baunilha.</p>
                         </li>
                         <li>
-                            <span>Cheesecake de Frutas Vermelhas</span>
-                            <p>Com calda artesanal e base crocante.</p>
+                            <span class="item-name">Cheesecake de Frutas Vermelhas</span>
+                            <p class="item-desc">Com calda artesanal e base crocante.</p>
                         </li>
                     </ul>
                 </div>
@@ -128,8 +155,8 @@
 
     <section id="home" class="hero">
         <div class="hero-content container">
-            <h1>O Melhor Buffet em Bangu</h1>
-            <p>Sabor, elegância e experiências gastronômicas inesquecíveis para o seu evento na Zona Oeste do Rio.</p>
+            <h1>O Melhor Buffet de Bangu</h1>
+            <p>Sabor e experiências gastronômicas inesquecíveis para o seu evento na Zona Oeste do Rio.</p>
             <div class="hero-btns">
                 <a href="#contato" class="btn">FAÇA SEU ORÇAMENTO</a>
                 <a href="javascript:void(0)" class="btn btn-outline" id="openMenuHero">CARDÁPIO</a>
@@ -217,8 +244,12 @@
     </main>
 
     <script>
+        const API_URL = 'http://127.0.0.1:5000';
+        
         const loginModal = document.getElementById('loginModal');
         const menuModal = document.getElementById('menuModal');
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
         
         const openLogin = document.getElementById('openLogin');
         const closeLogin = document.getElementById('closeLogin');
@@ -232,13 +263,218 @@
         const menuToggle = document.getElementById('menu-toggle');
         const navLinks = document.querySelectorAll('.nav-links a');
 
-        // Login Modal
-        if (openLogin) {
-            openLogin.onclick = function() {
-                loginModal.style.display = "flex";
-                document.body.style.overflow = "hidden";
+        const ownerControls = document.getElementById('ownerControls');
+        const editMenuBtn = document.getElementById('editMenuBtn');
+        const saveMenuBtn = document.getElementById('saveMenuBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const menuContainer = document.getElementById('menuContainer');
+
+        let isOwner = sessionStorage.getItem('isOwner') === 'true';
+
+        function updateUIForOwner() {
+            if (isOwner) {
+                ownerControls.style.display = 'flex';
+                openLogin.querySelector('span').textContent = 'Painel';
+                openLogin.classList.add('admin-active');
+            } else {
+                ownerControls.style.display = 'none';
+                openLogin.querySelector('span').textContent = 'Login';
+                openLogin.classList.remove('admin-active');
             }
         }
+
+        // Login Logic
+        if (loginForm) {
+            loginForm.onsubmit = async function(e) {
+                e.preventDefault();
+                const usuario = document.getElementById('username').value;
+                const senha = document.getElementById('password').value;
+                
+                try {
+                    const response = await fetch(`${API_URL}/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ usuario, senha }),
+                        credentials: 'include'
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        localStorage.setItem('ownerToken', data.token);
+                        // Força a atualização do estado global antes de atualizar a UI
+                        isOwner = true; 
+                        updateUIForOwner();
+                        loginModal.style.display = "none";
+                        document.body.style.overflow = "auto";
+                        loginForm.reset();
+                    } else {
+
+                        loginError.textContent = data.message;
+                        loginError.style.display = 'block';
+                    }
+                } catch (error) {
+                    loginError.textContent = 'Erro ao conectar ao servidor.';
+                    loginError.style.display = 'block';
+                }
+            };
+        }
+
+        // Menu Management
+        async function loadMenu() {
+            try {
+                const response = await fetch(`${API_URL}/api/menu`);
+                const items = await response.json();
+                
+                if (Array.isArray(items) && items.length > 0) {
+                    renderMenu(items);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar cardápio:', error);
+            }
+        }
+
+        function renderMenu(items) {
+            const categories = {
+                'entradas': { title: 'Entradas', items: [] },
+                'principais': { title: 'Pratos Principais', items: [] },
+                'sobremesas': { title: 'Sobremesas', items: [] }
+            };
+
+            items.forEach(item => {
+                if (categories[item.categoria]) {
+                    categories[item.categoria].items.push(item);
+                }
+            });
+
+            menuContainer.innerHTML = '';
+            for (const key in categories) {
+                const cat = categories[key];
+                const section = document.createElement('div');
+                section.className = 'menu-category';
+                section.innerHTML = `
+                    <h3>${cat.title}</h3>
+                    <ul class="menu-list" data-category="${key}">
+                        ${cat.items.map(item => `
+                            <li>
+                                <span class="item-name">${item.nome}</span>
+                                <p class="item-desc">${item.descricao}</p>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                menuContainer.appendChild(section);
+            }
+        }
+
+        // Edit Mode Toggle
+        editMenuBtn.onclick = () => {
+            menuModal.classList.add('editing');
+            editMenuBtn.style.display = 'none';
+            saveMenuBtn.style.display = 'inline-block';
+            cancelEditBtn.style.display = 'inline-block';
+            
+            const items = menuContainer.querySelectorAll('li');
+            items.forEach(li => {
+                const name = li.querySelector('.item-name').textContent;
+                const desc = li.querySelector('.item-desc').textContent;
+                li.innerHTML = `
+                    <input type="text" class="edit-input name-input" value="${name}">
+                    <textarea class="edit-textarea desc-input">${desc}</textarea>
+                `;
+            });
+        };
+
+        cancelEditBtn.onclick = () => {
+            menuModal.classList.remove('editing');
+            editMenuBtn.style.display = 'inline-block';
+            saveMenuBtn.style.display = 'none';
+            cancelEditBtn.style.display = 'none';
+            loadMenu(); // Recarrega original
+        };
+
+        const menuFeedback = document.getElementById('menuFeedback');
+
+        function showMenuFeedback(message, isError = false) {
+            menuFeedback.textContent = message;
+            menuFeedback.className = `menu-feedback ${isError ? 'error' : 'success'}`;
+            menuFeedback.style.display = 'block';
+            
+            setTimeout(() => {
+                menuFeedback.style.display = 'none';
+            }, 5000);
+        }
+
+        saveMenuBtn.onclick = async () => {
+            const updatedItems = [];
+            const categories = menuContainer.querySelectorAll('.menu-list');
+            
+            categories.forEach(catList => {
+                const category = catList.dataset.category;
+                const items = catList.querySelectorAll('li');
+                items.forEach(li => {
+                    updatedItems.push({
+                        categoria: category,
+                        nome: li.querySelector('.name-input').value,
+                        descricao: li.querySelector('.desc-input').value
+                    });
+                });
+            });
+
+            try {
+                const token = localStorage.getItem('ownerToken');
+                const response = await fetch(`${API_URL}/api/menu/update`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify(updatedItems)
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    showMenuFeedback('Cardápio atualizado com sucesso!');
+                    menuModal.classList.remove('editing'); // Garante a remoção da classe de edição
+                    editMenuBtn.style.display = 'inline-block';
+                    saveMenuBtn.style.display = 'none';
+                    cancelEditBtn.style.display = 'none';
+                    loadMenu(); // Recarrega o menu do banco para travar os campos
+                } else {
+                    showMenuFeedback('Erro ao salvar: ' + data.message, true);
+                    if (data.message === 'Não autorizado') {
+                        isOwner = false;
+                        localStorage.removeItem('ownerToken');
+                        updateUIForOwner();
+                        // Importante: recarregar o menu e sair do modo edição para não ficar travado
+                        cancelEditBtn.click();
+                    }
+                }
+            } catch (error) {
+                showMenuFeedback('Erro de conexão ao salvar.', true);
+            }
+        };
+
+        // Modal Control (Existing with updates)
+        if (openLogin) {
+            openLogin.onclick = async function() {
+                if (isOwner) {
+                    if (confirm('Deseja sair do painel?')) {
+                        isOwner = false;
+                        localStorage.removeItem('ownerToken');
+                        updateUIForOwner();
+                        try {
+                            await fetch(`${API_URL}/logout`, { method: 'POST' });
+                        } catch (e) {}
+                    }
+                    return; // Não abre o modal se já era dono
+                }
+                loginModal.style.display = "flex";
+                document.body.style.overflow = "hidden";
+                loginError.style.display = 'none';
+            }
+        }
+        
         if (closeLogin) {
             closeLogin.onclick = function() {
                 loginModal.style.display = "none";
@@ -246,11 +482,11 @@
             }
         }
 
-        // Menu Modal
         const handleOpenMenu = function() {
             menuModal.style.display = "flex";
             document.body.style.overflow = "hidden";
             if (menuToggle) menuToggle.checked = false;
+            loadMenu(); // Sempre carrega o menu atualizado
         }
 
         if (openMenu) openMenu.onclick = handleOpenMenu;
@@ -263,62 +499,49 @@
                 document.body.style.overflow = "auto";
             }
         }
+
         if (closeMenuToContact) {
             closeMenuToContact.onclick = function() {
                 menuModal.style.display = "none";
                 document.body.style.overflow = "auto";
             }
         }
-
-        // Fechar menu mobile ao clicar em links
-        navLinks.forEach(link => {
-            link.onclick = function() {
-                if (menuToggle) menuToggle.checked = false;
-            }
-        });
-
-        // Global Close
+        
         window.onclick = function(event) {
-            if (event.target == loginModal) {
-                loginModal.style.display = "none";
-                document.body.style.overflow = "auto";
-            }
-            if (event.target == menuModal) {
+            if (event.target == loginModal) loginModal.style.display = "none";
+            if (event.target == menuModal && !menuModal.classList.contains('editing')) {
                 menuModal.style.display = "none";
-                document.body.style.overflow = "auto";
             }
+            document.body.style.overflow = "auto";
         }
 
-        // Form Submit
-        document.querySelectorAll('form').forEach(form => {
-            form.onsubmit = function(e) {
-                e.preventDefault();
-                alert('Solicitação enviada com sucesso! Entraremos em contato.');
-                this.reset();
-                if (loginModal) loginModal.style.display = "none";
-                document.body.style.overflow = "auto";
-            }
-        });
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
 
-        // Phone Mask
-        const phoneInput = document.getElementById('phone');
-        if (phoneInput) {
-            phoneInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 11) value = value.slice(0, 11);
-                let formattedValue = '';
-                if (value.length > 0) {
-                    formattedValue = '(' + value.slice(0, 2);
-                    if (value.length > 2) {
-                        formattedValue += ') ' + value.slice(2, 7);
-                        if (value.length > 7) {
-                            formattedValue += '-' + value.slice(7, 11);
-                        }
-                    }
+        if (togglePassword) {
+            togglePassword.onclick = function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // Muda o ícone (opcional, aqui apenas alterna o texto/tipo)
+                if (type === 'text') {
+                    eyeIcon.innerHTML = `
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    `;
+                } else {
+                    eyeIcon.innerHTML = `
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    `;
                 }
-                e.target.value = formattedValue;
-            });
+            };
         }
+
+        // Initialize
+        updateUIForOwner();
+        loadMenu();
     </script>
 
     <footer>
@@ -329,4 +552,3 @@
     </footer>
 
 </body>
-</html>

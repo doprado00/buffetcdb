@@ -599,6 +599,188 @@ footer {
     margin-top: 10px;
 }
 
+/* Modal de Login Modernizado */
+.login-modal-content {
+    max-width: 450px;
+    background: linear-gradient(to bottom, #ffffff, #fcfaf5);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.modal-icon {
+    width: 60px;
+    height: 60px;
+    background: #fcf9f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--gold);
+    border: 2px solid rgba(212, 175, 55, 0.1);
+}
+
+.modal-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon svg:not(.toggle-password svg) {
+    position: absolute;
+    left: 15px;
+    width: 20px;
+    height: 20px;
+    color: #aaa;
+    pointer-events: none;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding: 15px 45px 15px 45px;
+    border: 1.5px solid #eee;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: #fff;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.toggle-password:hover {
+    color: var(--gold);
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+}
+
+.input-with-icon input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+}
+
+.btn-login {
+    width: 100%;
+    margin-top: 20px;
+    padding: 18px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.login-error {
+    margin-top: 15px;
+    padding: 12px;
+    background: #fff1f0;
+    border: 1px solid #ffa39e;
+    border-radius: 8px;
+    color: #cf1322;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Owner Controls */
+.owner-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-admin {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+}
+
+.btn-admin:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.9);
+}
+
+.menu-feedback {
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.menu-feedback.success {
+    background-color: #f6ffed;
+    border: 1px solid #b7eb8f;
+    color: #52c41a;
+}
+
+.menu-feedback.error {
+    background-color: #fff1f0;
+    border: 1px solid #ffa39e;
+    color: #cf1322;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Menu Editable Styles */
+.menu-list li {
+    position: relative;
+    padding: 10px;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.editing .menu-list li:hover {
+    background: #f9f9f9;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 5px;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.edit-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    resize: vertical;
+}
+
 /* Modal de Cardápio Específico */
 .menu-modal-content {
     max-width: 800px;
@@ -647,6 +829,33 @@ footer {
 .menu-category li p {
     font-size: 0.9rem;
     color: #777;
+}
+
+.menu-feedback {
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    animation: feedbackFadeIn 0.3s ease;
+}
+
+.menu-feedback.success {
+    background-color: #f6ffed;
+    border: 1px solid #b7eb8f;
+    color: #52c41a;
+}
+
+.menu-feedback.error {
+    background-color: #fff1f0;
+    border: 1px solid #ffa39e;
+    color: #cf1322;
+}
+
+@keyframes feedbackFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .menu-footer {
