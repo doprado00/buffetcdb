@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buffet em Bangu | Buffet Elegance - Eventos Inesquecíveis</title>
+    <title>Buffet em Bangu | Seleto Buffet - Eventos Inesquecíveis</title>
     <meta name="description" content="O melhor buffet em Bangu para casamentos, festas e eventos corporativos. Gastronomia de alta qualidade e atendimento impecável no Rio de Janeiro.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 
     <header>
         <div class="container nav-container">
-            <div class="logo">Buffet Elegance <small style="font-size: 0.6rem; display: block; letter-spacing: 1px; color: var(--gold);">BANGO - RJ</small></div>
+            <div class="logo">Seleto Buffet <small style="font-size: 0.6rem; display: block; letter-spacing: 1px; color: var(--gold);">BANGU - RJ</small></div>
             
             <input type="checkbox" id="menu-toggle" class="menu-toggle">
 
@@ -22,8 +22,8 @@
                 <ul>
                     <li><a href="#home">Início</a></li>
                     <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="javascript:void(0)" id="openMenuNav">Cardápio</a></li>
                     <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="javascript:void(0)" id="openMenuNav">Cardápio</a></li>    
                     <li><a href="#contato">Contato</a></li>
                 </ul>
             </nav>
@@ -174,6 +174,10 @@
                         </li>
                     </ul>
                 </div>
+                <div class="menu-scroll-indicator">
+                    <div class="menu-scroll-line"></div>
+                    <span>Role</span>
+                </div>
             </div>
             
             <div class="menu-footer">
@@ -228,16 +232,31 @@
                     <img src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80" alt="Gastronomia Fina em Bangu">
                 </div>
                 <div class="about-content">
-                    <p>Com mais de uma década dedicada à alta gastronomia, o <strong>Buffet Elegance</strong> é referência quando se busca um <strong>buffet em Bangu</strong> que une sofisticação e sabor.</p>
+                    <p>Com mais de uma década dedicada à alta gastronomia, o <strong>Seleto Buffet</strong> é referência quando se busca um <strong>buffet em Bangu</strong> que une sofisticação e sabor.</p>
                     <p>Localizado no coração de Bangu, nossa missão é transformar cada celebração em um marco inesquecível. Acreditamos que cada detalhe importa, desde a escolha dos ingredientes até o atendimento impecável da nossa equipe.</p>
                     <p>Seja para um casamento clássico, uma festa vibrante ou um evento corporativo, somos a escolha ideal para quem busca excelência na Zona Oeste do Rio de Janeiro.</p>
                 </div>
             </div>
         </section>
 
-        <section id="servicos">
-            <div class="container">
-                <h2 class="section-title">Nossos Serviços</h2>
+        <section id="servicos" class="serv">
+            <div class="section-header-decorative">
+                <div class="ornament ornament-top">
+                    <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 5C120 5 140 15 160 25M100 5C80 5 60 15 40 25M100 10C115 10 130 18 145 25M100 10C85 10 70 18 55 25" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="100" cy="5" r="2" fill="#d4af37"/>
+                        <path d="M90 15C95 12 105 12 110 15" stroke="#d4af37" stroke-width="1" fill="none"/>
+                    </svg>
+                </div>
+                <h2 class="section-title-sobre">NOSSOS SERVIÇOS</h2>
+                <div class="ornament ornament-bottom">
+                    <svg viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M40 5C60 15 80 25 100 25C120 25 140 15 160 5" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="100" cy="25" r="2" fill="#d4af37"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="container-serv">
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="service-icon">
@@ -665,7 +684,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Buffet CDB</p>
+            <p>&copy; 2026 Seleto Buffet</p>
             <p>(21) 97671-4721</p>
         </div>
     </footer>
