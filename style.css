@@ -1,6 +1,40 @@
-/* 
-   ESTILOS MOBILE-FIRST (Padrão para Celular)
-*/
+/* ==========================================================================
+   SELETO BUFFET - MAIN STYLESHEET
+   --------------------------------------------------------------------------
+   Table of Contents:
+   1. Design System & CSS Variables
+   2. Base & Reset
+   3. Utility Classes
+   4. Base Component Buttons
+   5. Header & Navigation (Mobile First & Desktop)
+   6. Hero Section
+   7. Section Headers & Ornaments
+   8. About Section ("Sobre")
+   9. Services Section ("Serviços")
+   10. Contact Section ("Contato")
+   11. Modals System (Login & Menu)
+   12. Footer
+   13. Animations
+   14. Global Modal State
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Design System & CSS Variables
+   ========================================================================== */
+:root {
+    --gold: #d4af37;
+    --gold-dark: #b8860b;
+    --gold-light: #fcf9f0;
+    --dark: #1a1a1a;
+    --white: #ffffff;
+    --gray: #f4f4f4;
+    --transition: all 0.3s ease;
+    --header-height: 98px;
+}
+
+/* ==========================================================================
+   2. Base & Reset
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -8,17 +42,9 @@
     font-family: sans-serif;
 }
 
-:root {
-    --gold: #d4af37;
-    --dark: #1a1a1a;
-    --white: #ffffff;
-    --gray: #f4f4f4;
-    --transition: all 0.3s ease;
-}
-
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 130px; /* Aumentado para dar mais respiro e "centralizar" melhor o título abaixo do header */
+    scroll-padding-top: 130px;
 }
 
 body {
@@ -30,6 +56,7 @@ body {
         radial-gradient(at 50% 0%, hsla(0, 0%, 100%, 1) 0, transparent 50%), 
         radial-gradient(at 100% 0%, hsla(43, 67%, 92%, 1) 0, transparent 50%);
     background-attachment: fixed;
+    padding-top: var(--header-height);
 }
 
 .container {
@@ -39,13 +66,87 @@ body {
     scroll-margin-top: 45px;
 }
 
-/* Header & Menu Hambúrguer */
+/* ==========================================================================
+   3. Utility Classes
+   ========================================================================== */
+.display-none {
+    display: none !important;
+}
+
+.logo-subtext {
+    font-size: 0.6rem;
+    display: block;
+    letter-spacing: 1px;
+    color: var(--gold);
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.badge-star-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    color: var(--gold);
+}
+
+.btn-full-width {
+    width: 100% !important;
+}
+
+/* ==========================================================================
+   4. Base Component Buttons
+   ========================================================================== */
+.btn {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--white);
+    padding: 16px 28px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    width: fit-content;
+    text-align: center;
+    border: 2px solid var(--gold);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.btn:hover {
+    background: #b8962e;
+    border-color: #b8962e;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border-color: var(--gold);
+}
+
+.btn-outline:hover {
+    background: var(--gold);
+    color: var(--white);
+}
+
+/* ==========================================================================
+   5. Header & Navigation
+   ========================================================================== */
 header {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     padding: 20px 0;
-    position: sticky;
+    position: fixed;
+    height: var(--header-height);
     top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
     box-shadow: 0 2px 15px rgba(0,0,0,0.03);
     transition: var(--transition);
@@ -56,6 +157,25 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.logo {
+    font-weight: 800;
+    color: var(--dark);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+}
+
+.logo::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 30px;
+    height: 3px;
+    background: var(--gold);
 }
 
 .nav-right {
@@ -87,38 +207,9 @@ header {
 }
 
 .login-btn:hover {
-    background: #fcf9f0;
+    background: var(--gold-light);
     border-color: var(--gold);
     color: var(--gold);
-}
-
-/* Esconder o texto do login em telas muito pequenas, se necessário, ou manter apenas o ícone */
-@media (max-width: 480px) {
-    .login-btn span {
-        display: none;
-    }
-    .login-btn {
-        padding: 8px;
-    }
-}
-
-.logo {
-    font-weight: 800;
-    color: var(--dark);
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    position: relative;
-}
-
-.logo::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 30px;
-    height: 3px;
-    background: var(--gold);
 }
 
 .menu-toggle {
@@ -138,7 +229,8 @@ header {
     margin: 5px 0;
     transition: 0.3s;
 }
-/* Menu Mobile (Escondido por padrão) */
+
+/* Navigation Menu - Mobile First */
 .nav-links {
     position: absolute;
     top: 100%;
@@ -177,19 +269,17 @@ header {
     transition: var(--transition);
 }
 
-/* Efeito de toque/hover no mobile */
 .nav-links a:active, 
 .nav-links a:hover {
-    background-color: #fcf9f0;
+    background-color: var(--gold-light);
     color: var(--gold);
 }
 
 .nav-links a.active {
     color: var(--gold);
-    background-color: #fcf9f0;
+    background-color: var(--gold-light);
     border-left: 3px solid var(--gold);
 }
-
 
 .menu-toggle:checked ~ .hamburger span:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
@@ -201,27 +291,25 @@ header {
     transform: rotate(-45deg) translate(7px, -6px);
 }
 
-/* Para o seletor ~ funcionar com nav-links fora de nav-right, precisamos ajustar o HTML ou o CSS.
-   Como movi nav-links para fora, vou usar um seletor que funcione ou mover nav-links de volta para perto do toggle.
-   Melhor: manter nav-links perto do checkbox.
-*/
-
 .menu-toggle:checked ~ .nav-links {
     max-height: 500px;
     opacity: 1;
     visibility: visible;
 }
 
-/* Hero Section - MOBILE (Padrão) */
-@keyframes heroFadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes scrollPulse {
-    0%, 100% { transform: scaleY(1); opacity: 1; }
-    50%       { transform: scaleY(1.6); opacity: 0.5; }
+/* Responsive Hide Text on Mobile */
+@media (max-width: 480px) {
+    .login-btn span {
+        display: none;
+    }
+    .login-btn {
+        padding: 8px;
+    }
 }
 
+/* ==========================================================================
+   6. Hero Section
+   ========================================================================== */
 .hero {
     height: 70vh;
     display: flex;
@@ -258,7 +346,6 @@ header {
     padding-left: 24px;
 }
 
-/* Badge decorativo */
 .hero-badge {
     font-size: 0.7rem;
     letter-spacing: 3px;
@@ -269,7 +356,6 @@ header {
     animation-delay: 0.1s;
 }
 
-/* Título hero */
 .hero-title {
     font-size: 2.4rem;
     line-height: 1.15;
@@ -279,6 +365,7 @@ header {
     animation: heroFadeUp 0.7s ease both;
     animation-delay: 0.25s;
 }
+
 .hero-title em {
     font-style: italic;
     font-family: 'Playfair Display', Georgia, serif;
@@ -286,7 +373,6 @@ header {
     color: var(--gold);
 }
 
-/* Divisor dourado */
 .hero-divider {
     width: 50px;
     height: 3px;
@@ -314,7 +400,6 @@ header {
     animation-delay: 0.65s;
 }
 
-/* Botão outline no hero: dourado no hover */
 .hero-btn-outline {
     border-color: var(--gold);
     color: var(--gold);
@@ -323,18 +408,19 @@ header {
     display: inline-flex;
     align-items: center;
 }
+
 .hero-btn-outline:hover {
     background: var(--gold);
     color: var(--white);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(212,175,55,0.35);
 }
+
 .hero-btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(212,175,55,0.35);
 }
 
-/* Scroll indicator */
 .hero-scroll-indicator {
     position: absolute;
     bottom: 30px;
@@ -351,6 +437,7 @@ header {
     text-transform: uppercase;
     animation: heroFadeUp 1s ease 1.2s both;
 }
+
 .hero-scroll-line {
     width: 2px;
     height: 28px;
@@ -359,42 +446,9 @@ header {
     animation: scrollPulse 1.5s ease-in-out infinite;
 }
 
-
-/* ===== Botões Base ===== */
-.btn {
-    display: inline-block;
-    background: var(--gold);
-    color: var(--white);
-    padding: 16px 28px;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    width: fit-content;
-    text-align: center;
-    border: 2px solid var(--gold);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-}
-
-.btn:hover {
-    background: #b8962e;
-    border-color: #b8962e;
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--gold);
-    border-color: var(--gold);
-}
-
-.btn-outline:hover {
-    background: var(--gold);
-    color: var(--white);
-}
-
-/* Seções Gerais */
+/* ==========================================================================
+   7. Section Headers & Decorative Ornaments
+   ========================================================================== */
 section {
     padding: 60px 0;
 }
@@ -415,18 +469,11 @@ section {
     margin: 10px auto;
 }
 
-/* Sobre Nós - Estilo Mockup Exato */
-#sobre {
-    scroll-margin-top: -37px; 
-    margin-top: 0;
-    padding: 30px 0;
-}
-
 .section-header-decorative {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     position: relative;
 }
 
@@ -438,6 +485,7 @@ section {
     text-transform: uppercase;
     letter-spacing: 4px;
     margin: 5px 0;
+    padding-left: 60px;
     text-align: center;
 }
 
@@ -451,33 +499,63 @@ section {
     height: auto;
 }
 
-.ornament-top {
-    margin-bottom: -10px;
+.ornament-top-sobre {
+    margin-bottom: -50px;
+    padding-left: 100px;
+    width: 80%;
 }
 
-.ornament-bottom {
+.ornament-bottom-sobre {
     margin-top: -15px;
+    padding-left: 160px;
+    width: 70%;
+}
+
+.ornament-top-serv {
+    margin-bottom: -50px;
+    padding-left: 50px;
+    width: 30%;
+}
+
+.ornament-bottom-serv {
+    margin-top: -5px;
+    padding-left: 50px;
+    width: 20%;
+}
+
+/* ==========================================================================
+   8. About Section ("Sobre Nós")
+   ========================================================================== */
+#sobre {
+    scroll-margin-top: -20px; 
+    margin-top: 50px;
+    padding: 40px 0 60px 0;
 }
 
 .about-grid {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
     align-items: center;
 }
 
 .about-image {
+    position: relative;
     width: 100%;
-    max-width: 500px;
-    border-radius: 12px;
+    max-width: 540px;
+    height: 520px;
+    border-radius: 16px;
     overflow: hidden;
-    border: 5px solid #fff;
-    box-shadow: 0 0 40px rgba(212, 175, 55, 0.4); /* Brilho dourado da foto */
-    transition: transform 0.4s ease;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.15), 0 0 35px rgba(212, 175, 55, 0.25);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    margin: 0 auto;
 }
 
 .about-image:hover {
-    transform: scale(1.02);
+    box-shadow: 0 25px 55px -10px rgba(0, 0, 0, 0.22), 0 0 45px rgba(212, 175, 55, 0.4);
 }
 
 .about-image img {
@@ -485,36 +563,91 @@ section {
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 10px;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-image:hover img {
+    transform: scale(1.04);
+}
+
+.about-image-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(18, 18, 18, 0.82);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: var(--gold);
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.82rem;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    pointer-events: none;
 }
 
 .about-content {
+    width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    text-align: left; /* Alinhado à esquerda como na foto */
+    text-align: left;
     font-size: 1.15rem;
     line-height: 1.8;
 }
 
-.about-content p {
+.section-header-left {
+    align-items: flex-start;
     margin-bottom: 25px;
-    color: #222;
-    font-weight: 400;
 }
 
-/* No desktop, o about-content volta a alinhar à esquerda quando ao lado da foto */
+.section-header-left .section-title-sobre {
+    text-align: left;
+    margin: 4px 0 10px 0;
+}
+
+.section-header-left .ornament {
+    margin-left: 0;
+}
+
+/* Desktop layout for About section */
 @media (min-width: 1024px) {
     .about-grid {
-        flex-direction: row;
-        justify-content: center;
-        gap: 60px;
+        display: grid;
+        grid-template-columns: 1fr 1.05fr;
+        gap: 55px;
+        align-items: stretch;
+    }
+
+    .about-image {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        min-height: 520px;
+        margin: 0;
     }
 
     .about-content {
-        max-width: 600px;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }
 
-/* Serviços (Restaurado) */
+/* ==========================================================================
+   9. Services Section ("Serviços")
+   ========================================================================== */
+.serv {
+    padding-top: 20px;
+}
+
 .container-serv {
     padding: 0 20px;
     max-width: 1200px;
@@ -574,7 +707,6 @@ section {
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Animação de Hover (Mouse em cima) */
 .btn-services:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
@@ -582,16 +714,17 @@ section {
     color: var(--white);
 }
 
-/* Animação de Click/Toque (Celular e Mouse) */
 .btn-services:active {
     transform: scale(0.95);
     box-shadow: 0 5px 10px rgba(212, 175, 55, 0.1);
 }
 
-/* Card de Contato Estilo */
+/* ==========================================================================
+   10. Contact Section ("Contato")
+   ========================================================================== */
 .contact-new-card {
-    background: #eeeeee; /* Parte cinza claro */
-    border-radius: 40px; /* Bordas bem arredondadas */
+    background: #eeeeee;
+    border-radius: 40px;
     padding: 60px 20px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -621,7 +754,7 @@ section {
 
 .btn-solicitar {
     display: inline-block;
-    background: #c5a059; /* Tom de dourado mais próximo da foto */
+    background: #c5a059;
     color: var(--white);
     padding: 20px 40px;
     text-decoration: none;
@@ -648,7 +781,7 @@ section {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    color: #8b6d31; /* Cor do link de whatsapp na foto */
+    color: #8b6d31;
     font-weight: 500;
     font-size: 1rem;
 }
@@ -668,16 +801,9 @@ section {
     }
 }
 
-/* Footer */
-footer {
-    background: var(--dark);
-    color: var(--white);
-    padding: 30px 0;
-    text-align: center;
-    margin-top: 60px;
-}
-
-/* Modal de Login */
+/* ==========================================================================
+   11. Modals System (Login & Menu)
+   ========================================================================== */
 .modal {
     display: none;
     position: fixed;
@@ -685,12 +811,22 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 2000;
     justify-content: center;
     align-items: center;
     padding: 20px;
+}
+
+/* Page wrapper — blurs real site content behind modals */
+#page-wrapper {
+    transition: filter 0.25s ease;
+}
+
+#page-wrapper.blurred {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
 }
 
 .modal-content {
@@ -702,11 +838,6 @@ footer {
     position: relative;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     animation: modalAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes modalAppear {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 .close-modal {
@@ -742,19 +873,7 @@ footer {
     font-size: 0.9rem;
 }
 
-.login-form .input-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.login-form .btn {
-    margin-top: 10px;
-}
-
-/* Modal de Login Modernizado */
+/* Login Modal Specifics */
 .login-modal-content {
     max-width: 450px;
     background: linear-gradient(to bottom, #ffffff, #fcfaf5);
@@ -764,7 +883,7 @@ footer {
 .modal-icon {
     width: 60px;
     height: 60px;
-    background: #fcf9f0;
+    background: var(--gold-light);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -777,6 +896,18 @@ footer {
 .modal-icon svg {
     width: 30px;
     height: 30px;
+}
+
+.login-form .input-group {
+    margin-bottom: 20px;
+}
+
+.login-form .input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #666;
 }
 
 .input-with-icon {
@@ -796,12 +927,18 @@ footer {
 
 .input-with-icon input {
     width: 100%;
-    padding: 15px 45px 15px 45px;
+    padding: 15px 45px;
     border: 1.5px solid #eee;
     border-radius: 10px;
     font-size: 1rem;
     transition: var(--transition);
     background: #fff;
+}
+
+.input-with-icon input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
 }
 
 .toggle-password {
@@ -827,12 +964,6 @@ footer {
     height: 20px;
 }
 
-.input-with-icon input:focus {
-    outline: none;
-    border-color: var(--gold);
-    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
-}
-
 .btn-login {
     display: block;
     margin: 20px auto 0;
@@ -855,7 +986,61 @@ footer {
     text-align: center;
 }
 
-/* Owner Controls */
+/* Owner Panel View */
+.owner-modal-icon {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+}
+
+.owner-icon-svg {
+    width: 30px;
+    height: 30px;
+}
+
+.user-logged-info {
+    margin-top: 10px;
+}
+
+.user-logged-name {
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.owner-actions {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.owner-btn-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-panel-tab {
+    flex: 1;
+    padding: 12px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.btn-logout {
+    width: 100%;
+    border-color: #ffa39e;
+    color: #cf1322;
+    background: #fff1f0;
+}
+
+/* Owner Controls for Menu Edit */
 .owner-controls {
     display: flex;
     justify-content: center;
@@ -880,6 +1065,207 @@ footer {
     filter: brightness(0.9);
 }
 
+/* Menu Modal Specifics */
+.menu-modal-content {
+    background: #fbf7f0;
+    background-image: radial-gradient(#f2e7d3 1px, transparent 0);
+    background-size: 24px 24px;
+    max-width: 840px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 24px;
+    padding: 45px 55px;
+    border: 1px solid #ebdcb8;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(212, 175, 55, 0.25);
+    color: #1a1a1a;
+}
+
+.menu-modal-content .close-modal {
+    color: #8a733e;
+    top: 22px;
+    right: 28px;
+    font-size: 2.2rem;
+}
+
+.menu-modal-content .close-modal:hover {
+    color: #111;
+}
+
+.menu-modal-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.menu-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0b0b0b;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+}
+
+.menu-title-ornament {
+    width: 260px;
+    margin: 4px auto 0;
+    display: block;
+    opacity: 0.95;
+}
+
+.menu-categories {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.menu-scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 80%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: rgba(240, 195, 48, 0.81);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: heroFadeUp 0.5s ease 0.3s both;
+}
+
+.menu-scroll-line {
+    width: 2px;
+    height: 25px;
+    background: var(--gold);
+    border-radius: 2px;
+    position: relative;
+    animation: scrollPulse 1.7s ease-in-out infinite;
+}
+
+/* Ponta da seta em V */
+.menu-scroll-line::after {
+    content: '';
+    position: absolute;
+    bottom: 3px; 
+    left: 50%;
+    width: 10px; 
+    height: 10px; 
+    border-right: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    transform: translateX(-50%) rotate(45deg);
+}
+
+@media (min-width: 768px) {
+    .menu-categories {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 55px;
+        row-gap: 35px;
+        align-items: start;
+    }
+
+    .menu-category[data-cat="entradas"] {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .menu-category[data-cat="sobremesas"] {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .menu-category[data-cat="principais"] {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+    }
+}
+
+.menu-category h3 {
+    color: #98721c;
+    font-family: 'Playfair Display', serif;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.category-divider {
+    margin-bottom: 20px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.category-divider svg {
+    width: 100%;
+    max-height: 16px;
+}
+
+.menu-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-category li {
+    margin-bottom: 22px;
+    position: relative;
+    padding: 10px;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.menu-category li:last-child {
+    margin-bottom: 0;
+}
+
+.editing .menu-list li:hover {
+    background: #f9f9f9;
+}
+
+.menu-category li .item-name {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #0d0d0d;
+    font-size: 1.05rem;
+    margin-bottom: 3px;
+    letter-spacing: 0.2px;
+}
+
+.menu-category li .item-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.92rem;
+    color: #3b3b3b;
+    line-height: 1.45;
+    margin: 0;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 5px;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.edit-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    resize: vertical;
+}
+
 .menu-feedback {
     margin: 10px 0;
     padding: 12px;
@@ -902,165 +1288,127 @@ footer {
     color: #cf1322;
 }
 
+.menu-footer {
+    margin-top: 35px;
+    text-align: center;
+    border-top: 1px solid #ebdcb8;
+    padding-top: 25px;
+}
+
+.menu-footer p {
+    font-size: 0.88rem;
+    color: #666666;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-menu-budget {
+    display: inline-block;
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+    color: #ffffff !important;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 14px 34px;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(184, 134, 11, 0.35);
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-menu-budget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(184, 134, 11, 0.45);
+    background: linear-gradient(135deg, #e5bf45 0%, #c49212 100%);
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   12. Footer
+   ========================================================================== */
+footer {
+    background: var(--dark);
+    color: var(--white);
+    padding: 30px 0;
+    text-align: center;
+    margin-top: 60px;
+}
+
+/* ==========================================================================
+   13. Animations
+   ========================================================================== */
+
+/* Animação de surgimento dos elementos do header */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Classes base para animação */
+.header-element {
+    opacity: 0; /* Começa invisível */
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Logo com efeito diferente (escala) */
+.header-logo {
+    opacity: 0;
+    animation: fadeInScale 0.8s ease-out forwards;
+}
+
+/* Delays em cascata para cada elemento */
+.header-element:nth-child(1) { animation-delay: 0.1s; }
+.header-element:nth-child(2) { animation-delay: 0.2s; }
+.header-element:nth-child(3) { animation-delay: 0.3s; }
+.header-element:nth-child(4) { animation-delay: 0.4s; }
+.header-element:nth-child(5) { animation-delay: 0.5s; }
+.header-element:nth-child(6) { animation-delay: 0.6s; }
+
+/* Ajuste específico para o logo (sempre primeiro) */
+.header-logo { animation-delay: 0s; }
+
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50%       { transform: scaleY(1.6); opacity: 0.5; }
+}
+
+@keyframes modalAppear {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Menu Editable Styles */
-.menu-list li {
-    position: relative;
-    padding: 10px;
-    border-radius: 8px;
-    transition: var(--transition);
-}
-
-.editing .menu-list li:hover {
-    background: #f9f9f9;
-}
-
-.edit-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 5px;
-    border: 1px solid var(--gold);
-    border-radius: 4px;
-    font-family: inherit;
-}
-
-.edit-textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 0.85rem;
-    resize: vertical;
-}
-
-/* Modal de Cardápio Específico */
-.menu-modal-content {
-    max-width: 800px;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.menu-categories {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-    margin-top: 20px;
-}
-
-@media (min-width: 768px) {
-    .menu-categories {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.menu-category h3 {
-    color: var(--gold);
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-}
-
-.menu-category ul {
-    list-style: none;
-}
-
-.menu-category li {
-    margin-bottom: 15px;
-}
-
-.menu-category li span {
-    display: block;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 3px;
-}
-
-.menu-category li p {
-    font-size: 0.9rem;
-    color: #777;
-}
-
-.menu-feedback {
-    margin: 10px 0;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.9rem;
-    animation: feedbackFadeIn 0.3s ease;
-}
-
-.menu-feedback.success {
-    background-color: #f6ffed;
-    border: 1px solid #b7eb8f;
-    color: #52c41a;
-}
-
-.menu-feedback.error {
-    background-color: #fff1f0;
-    border: 1px solid #ffa39e;
-    color: #cf1322;
-}
-
-@keyframes feedbackFadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.menu-footer {
-    margin-top: 40px;
-    text-align: center;
-    border-top: 1px solid #eee;
-    padding-top: 30px;
-}
-
-.menu-footer p {
-    font-size: 0.85rem;
-    color: #999;
-    margin-bottom: 20px;
-    font-style: italic;
-}
-
-.menu-scroll-indicator {
-    position: absolute;
-    bottom: 25px;
-    left: 85%;
-    transform: translateX(-50%);
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    color: #d4af37;
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    animation: heroFadeUp 1s ease 0s both;
-}
-
-.menu-scroll-line {
-    width: 2px;
-    height: 28px;
-    background: var(--gold);
-    border-radius: 2px;
-    animation: scrollPulse 1.5s ease-in-out infinite;
-}
-
-.menu-scroll-line span {
-    display: block;
-    margin-top: -50px;
-}
-/* 
-   ESTILOS DESKTOP (Para telas maiores que 1024px)
-*/
+/* ==========================================================================
+   14. Desktop & Responsive Override Styles (>= 1024px)
+   ========================================================================== */
 @media (min-width: 1024px) {
     .hamburger {
         display: none;
@@ -1091,7 +1439,7 @@ footer {
 
     .nav-links ul {
         display: flex;
-        gap: 5px; /* Reduzido para aproximar as áreas de clique */
+        gap: 5px;
         padding: 0;
     }
 
@@ -1107,8 +1455,8 @@ footer {
         letter-spacing: 1px;
         color: var(--dark);
         position: relative;
-        padding: 15px 20px; /* Aumenta área de clique vertical e horizontal */
-        display: block; /* Garante que o padding conte para o clique */
+        padding: 15px 20px;
+        display: block;
         transition: color 0.3s ease;
     }
 
@@ -1128,6 +1476,16 @@ footer {
     }
 
     .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .nav-links a.active {
+        color: var(--gold);
+        background: none;
+        border-left: none;
+    }
+    
+    .nav-links a.active::after {
         width: 100%;
     }
 
@@ -1188,16 +1546,6 @@ footer {
         color: rgba(255,255,255,0.82);
     }
 
-    .nav-links a.active {
-        color: var(--gold);
-        background: none;
-        border-left: none;
-    }
-    .nav-links a.active::after {
-        width: 100%;
-    }
-
-
     .btn {
         width: auto;
     }
@@ -1216,9 +1564,10 @@ footer {
     }
 }
 
-/* Trava scroll de fundo quando modal estiver aberto */
+/* ==========================================================================
+   15. Global Modal Scroll Lock
+   ========================================================================== */
 html.modal-open, body.modal-open {
     overflow: hidden !important;
     height: 100% !important;
 }
-

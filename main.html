@@ -12,23 +12,29 @@
 </head>
 <body>
 
+    <div id="page-wrapper">
+
+    <!-- Header & Navigation -->
     <header>
         <div class="container nav-container">
-            <div class="logo">Seleto Buffet <small style="font-size: 0.6rem; display: block; letter-spacing: 1px; color: var(--gold);">BANGU - RJ</small></div>
+            <div class="logo header-logo">
+                Seleto Buffet
+                <small class="logo-subtext">BANGU - RJ</small>
+            </div>
             
             <input type="checkbox" id="menu-toggle" class="menu-toggle">
 
             <nav class="nav-links">
                 <ul>
-                    <li><a href="#home">Início</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="#servicos">Serviços</a></li>
-                    <li><a href="javascript:void(0)" id="openMenuNav">Cardápio</a></li>    
-                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="#home" class="header-element">Início</a></li>
+                    <li><a href="#sobre" class="header-element">Sobre</a></li>
+                    <li><a href="#servicos" class="header-element">Serviços</a></li>
+                    <li><a href="javascript:void(0)" id="openMenuNav" class="header-element">Cardápio</a></li>    
+                    <li><a href="#contato" class="header-element">Contato</a></li>
                 </ul>
             </nav>
 
-            <div class="nav-right">
+            <div class="nav-right header-element">
                 <a href="javascript:void(0)" class="login-btn" id="openLogin" title="Área do Proprietário">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -46,6 +52,8 @@
             </div>
         </div>
     </header>
+
+    </div><!-- /#page-wrapper -->
 
     <!-- Modal de Login -->
     <div id="loginModal" class="modal">
@@ -65,16 +73,22 @@
                 </div>
                 <form id="loginForm" class="login-form">
                     <div class="input-group">
-                        <label>Usuário</label>
+                        <label for="username">Usuário</label>
                         <div class="input-with-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
                             <input type="text" id="username" placeholder="Digite seu usuário" required>
                         </div>
                     </div>
                     <div class="input-group">
-                        <label>Senha</label>
+                        <label for="password">Senha</label>
                         <div class="input-with-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
                             <input type="password" id="password" placeholder="Digite sua senha" required>
                             <button type="button" id="togglePassword" class="toggle-password" title="Mostrar/Ocultar senha">
                                 <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -86,29 +100,29 @@
                     </div>
                     <button type="submit" class="btn btn-login">ENTRAR NO PAINEL</button>
                 </form>
-                <div id="loginError" class="login-error" style="display: none;"></div>
+                <div id="loginError" class="login-error display-none"></div>
             </div>
 
             <!-- Visão do Painel (Quando Conectado) -->
-            <div id="ownerView" style="display: none;">
+            <div id="ownerView" class="display-none">
                 <div class="modal-header">
-                    <div class="modal-icon" style="background: rgba(212, 175, 55, 0.1); color: var(--gold); display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 15px;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 30px; height: 30px;">
+                    <div class="modal-icon owner-modal-icon">
+                        <svg class="owner-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="16" x2="12" y2="12"></line>
                             <line x1="12" y1="8" x2="12.01" y2="8"></line>
                         </svg>
                     </div>
                     <h2>Painel do Proprietário</h2>
-                    <p style="margin-top: 10px;">Você está conectado como: <strong id="loggedInUser" style="color: var(--gold); font-weight: 700;">admin</strong></p>
+                    <p class="user-logged-info">Você está conectado como: <strong id="loggedInUser" class="user-logged-name">admin</strong></p>
                 </div>
-                <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px;">
-                    <button id="closePanelBtn" class="btn" style="width: 100%;">VOLTAR AO SITE</button>
-                    <div style="display: flex; gap: 10px; width: 100%;">
-                        <button id="panelMenuBtn" class="btn btn-outline" style="flex: 1; padding: 12px; font-size: 0.85rem; letter-spacing: 1px;">CARDÁPIO</button>
-                        <button id="panelGalleryBtn" class="btn btn-outline" style="flex: 1; padding: 12px; font-size: 0.85rem; letter-spacing: 1px;">GALERIA</button>
+                <div class="owner-actions">
+                    <button id="closePanelBtn" class="btn btn-full-width">VOLTAR AO SITE</button>
+                    <div class="owner-btn-row">
+                        <button id="panelMenuBtn" class="btn btn-outline btn-panel-tab">CARDÁPIO</button>
+                        <button id="panelGalleryBtn" class="btn btn-outline btn-panel-tab">GALERIA</button>
                     </div>
-                    <button id="logoutBtn" class="btn btn-outline" style="width: 100%; border-color: #ffa39e; color: #cf1322; background: #fff1f0;">SAIR DA CONTA</button>
+                    <button id="logoutBtn" class="btn btn-outline btn-logout">SAIR DA CONTA</button>
                 </div>
             </div>
         </div>
@@ -118,37 +132,63 @@
     <div id="menuModal" class="modal">
         <div class="modal-content menu-modal-content">
             <span class="close-modal" id="closeMenu">&times;</span>
-            <div class="modal-header">
-                <h2>Nosso Cardápio</h2>
-                <p id="menuSubtitle">Experiências Gastronômicas</p>
+            <div class="modal-header menu-modal-header">
+                <h2 class="menu-modal-title">NOSSO CARDÁPIO</h2>
+                <div class="menu-title-ornament">
+                    <svg viewBox="0 0 320 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M160 14 C140 2, 120 26, 100 14 C80 2, 60 20, 30 14 C15 10, 5 14, 0 14" stroke="#b8860b" stroke-width="1.5" fill="none"/>
+                        <path d="M160 14 C180 2, 200 26, 220 14 C240 2, 260 20, 290 14 C305 10, 315 14, 320 14" stroke="#b8860b" stroke-width="1.5" fill="none"/>
+                        <path d="M160 7 C150 13, 140 13, 130 14 M160 7 C170 13, 180 13, 190 14" stroke="#d4af37" stroke-width="1.2"/>
+                        <path d="M160 21 C150 15, 140 15, 130 14 M160 21 C170 15, 180 15, 190 14" stroke="#d4af37" stroke-width="1.2"/>
+                        <circle cx="160" cy="14" r="3.5" fill="#b8860b"/>
+                        <circle cx="130" cy="14" r="2.5" fill="#d4af37"/>
+                        <circle cx="190" cy="14" r="2.5" fill="#d4af37"/>
+                        <circle cx="100" cy="14" r="2" fill="#b8860b"/>
+                        <circle cx="220" cy="14" r="2" fill="#b8860b"/>
+                    </svg>
+                </div>
             </div>
             
-            <div id="ownerControls" class="owner-controls" style="display: none;">
+            <div id="ownerControls" class="owner-controls display-none">
                 <button id="editMenuBtn" class="btn-admin">✏️ EDITAR CARDÁPIO</button>
-                <button id="saveMenuBtn" class="btn-admin btn-save" style="display: none;">✅ SALVAR ALTERAÇÕES</button>
-                <button id="cancelEditBtn" class="btn-admin btn-cancel" style="display: none;">❌ CANCELAR</button>
+                <button id="saveMenuBtn" class="btn-admin btn-save display-none">✅ SALVAR ALTERAÇÕES</button>
+                <button id="cancelEditBtn" class="btn-admin btn-cancel display-none">❌ CANCELAR</button>
             </div>
             
-            <div id="menuFeedback" class="menu-feedback" style="display: none;"></div>
+            <div id="menuFeedback" class="menu-feedback display-none"></div>
 
             <div class="menu-categories" id="menuContainer">
-                <!-- O cardápio será carregado dinamicamente aqui -->
-                <div class="menu-category">
-                    <h3>Entradas</h3>
+                <!-- O cardápio será carregado dinamicamente via JS -->
+                <div class="menu-category" data-cat="entradas">
+                    <h3>ENTRADAS</h3>
+                    <div class="category-divider">
+                        <svg viewBox="0 0 200 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="0" y1="5" x2="200" y2="5" stroke="#b8860b" stroke-width="1" opacity="0.6"/>
+                        </svg>
+                    </div>
                     <ul class="menu-list" data-category="entradas">
                         <li>
-                            <span class="item-name">Canapés de Salmão Defumado</span>
+                            <span class="item-name">Canapés de Salmão Frito</span>
                             <p class="item-desc">Com cream cheese e raspas de limão siciliano.</p>
                         </li>
                         <li>
-                            <span class="item-name">Bruschettas de Cogumelos</span>
+                            <span class="item-name">Bruschetta de Cogumelos</span>
                             <p class="item-desc">Mix de cogumelos frescos com azeite de trufas.</p>
                         </li>
                     </ul>
                 </div>
 
-                <div class="menu-category">
-                    <h3>Pratos Principais</h3>
+                <div class="menu-category" data-cat="principais">
+                    <h3>PRATOS PRINCIPAIS</h3>
+                    <div class="category-divider">
+                        <svg viewBox="0 0 240 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 8 L95 8 M145 8 L240 8" stroke="#b8860b" stroke-width="1.2"/>
+                            <path d="M95 8 C102 2, 108 14, 120 8 C132 2, 138 14, 145 8" stroke="#b8860b" stroke-width="1.2"/>
+                            <circle cx="120" cy="8" r="2.5" fill="#b8860b"/>
+                            <circle cx="100" cy="8" r="1.5" fill="#d4af37"/>
+                            <circle cx="140" cy="8" r="1.5" fill="#d4af37"/>
+                        </svg>
+                    </div>
                     <ul class="menu-list" data-category="principais">
                         <li>
                             <span class="item-name">Filé Mignon ao Molho Madeira</span>
@@ -161,8 +201,15 @@
                     </ul>
                 </div>
 
-                <div class="menu-category">
-                    <h3>Sobremesas</h3>
+                <div class="menu-category" data-cat="sobremesas">
+                    <h3>SOBREMESAS</h3>
+                    <div class="category-divider">
+                        <svg viewBox="0 0 200 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 7 L80 7 M120 7 L200 7" stroke="#b8860b" stroke-width="1"/>
+                            <path d="M80 7 C88 1, 95 13, 100 7 C105 1, 112 13, 120 7" stroke="#b8860b" stroke-width="1.2"/>
+                            <circle cx="100" cy="7" r="2" fill="#b8860b"/>
+                        </svg>
+                    </div>
                     <ul class="menu-list" data-category="sobremesas">
                         <li>
                             <span class="item-name">Petit Gâteau de Chocolate Belga</span>
@@ -174,19 +221,20 @@
                         </li>
                     </ul>
                 </div>
-                <div class="menu-scroll-indicator">
-                    <div class="menu-scroll-line"></div>
-                    <span>Role</span>
-                </div>
             </div>
             
             <div class="menu-footer">
                 <p>* Cardápios personalizados disponíveis sob consulta.</p>
-                <a href="#contato" class="btn" id="closeMenuToContact">SOLICITAR ORÇAMENTO</a>
+                <a href="#contato" class="btn btn-menu-budget" id="closeMenuToContact">FAÇA SEU ORÇAMENTO</a>
+            </div>
+            <div class="menu-scroll-indicator">
+                <div class="menu-scroll-line"></div>
+                <span>Role</span>
             </div>
         </div>
     </div>
 
+    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content container">
             <div class="hero-badge">✦ Bangu · Rio de Janeiro ✦</div>
@@ -198,7 +246,9 @@
             <div class="hero-btns">
                 <a href="#contato" class="btn hero-btn-primary">FAÇA SEU ORÇAMENTO</a>
                 <a href="javascript:void(0)" class="btn btn-outline hero-btn-outline" id="openMenuHero">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:6px;"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h7"/>
+                    </svg>
                     CARDÁPIO
                 </a>
             </div>
@@ -209,29 +259,37 @@
         </div>
     </section>
 
+    <!-- Main Content -->
     <main>
+        <!-- Sobre Nós -->
         <section id="sobre" class="container">
-            <div class="section-header-decorative">
-                <div class="ornament ornament-top">
-                    <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 5C120 5 140 15 160 25M100 5C80 5 60 15 40 25M100 10C115 10 130 18 145 25M100 10C85 10 70 18 55 25" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="100" cy="5" r="2" fill="#d4af37"/>
-                        <path d="M90 15C95 12 105 12 110 15" stroke="#d4af37" stroke-width="1" fill="none"/>
-                    </svg>
-                </div>
-                <h2 class="section-title-sobre">BUFFET EM BANGU</h2>
-                <div class="ornament ornament-bottom">
-                    <svg viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M40 5C60 15 80 25 100 25C120 25 140 15 160 5" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="100" cy="25" r="2" fill="#d4af37"/>
-                    </svg>
-                </div>
-            </div>
             <div class="about-grid">
                 <div class="about-image">
                     <img src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80" alt="Gastronomia Fina em Bangu">
+                    <div class="about-image-badge">
+                        <svg class="badge-star-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Alta Gastronomia
+                    </div>
                 </div>
                 <div class="about-content">
+                    <div class="section-header-decorative section-header-left">
+                        <div class="ornament ornament-top-sobre">
+                            <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M100 5C120 5 140 15 160 25M100 5C80 5 60 15 40 25M100 10C115 10 130 18 145 25M100 10C85 10 70 18 55 25" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="100" cy="5" r="2" fill="#d4af37"/>
+                                <path d="M90 15C95 12 105 12 110 15" stroke="#d4af37" stroke-width="1" fill="none"/>
+                            </svg>
+                        </div>
+                        <h2 class="section-title-sobre">BUFFET EM BANGU</h2>
+                        <div class="ornament ornament-bottom-sobre">
+                            <svg viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40 5C60 15 80 25 100 25C120 25 140 15 160 5" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="100" cy="25" r="2" fill="#d4af37"/>
+                            </svg>
+                        </div>
+                    </div>
                     <p>Com mais de uma década dedicada à alta gastronomia, o <strong>Seleto Buffet</strong> é referência quando se busca um <strong>buffet em Bangu</strong> que une sofisticação e sabor.</p>
                     <p>Localizado no coração de Bangu, nossa missão é transformar cada celebração em um marco inesquecível. Acreditamos que cada detalhe importa, desde a escolha dos ingredientes até o atendimento impecável da nossa equipe.</p>
                     <p>Seja para um casamento clássico, uma festa vibrante ou um evento corporativo, somos a escolha ideal para quem busca excelência na Zona Oeste do Rio de Janeiro.</p>
@@ -239,9 +297,10 @@
             </div>
         </section>
 
+        <!-- Serviços -->
         <section id="servicos" class="serv">
             <div class="section-header-decorative">
-                <div class="ornament ornament-top">
+                <div class="ornament ornament-top-serv">
                     <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M100 5C120 5 140 15 160 25M100 5C80 5 60 15 40 25M100 10C115 10 130 18 145 25M100 10C85 10 70 18 55 25" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
                         <circle cx="100" cy="5" r="2" fill="#d4af37"/>
@@ -249,7 +308,7 @@
                     </svg>
                 </div>
                 <h2 class="section-title-sobre">NOSSOS SERVIÇOS</h2>
-                <div class="ornament ornament-bottom">
+                <div class="ornament ornament-bottom-serv">
                     <svg viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M40 5C60 15 80 25 100 25C120 25 140 15 160 5" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
                         <circle cx="100" cy="25" r="2" fill="#d4af37"/>
@@ -301,12 +360,13 @@
             </div>
         </section>
 
+        <!-- Contato -->
         <section id="contato" class="container">
             <div class="contact-new-card">
                 <h2>Pronto para planejar sua próxima experiência?</h2>
                 <p>Nossa equipe está à disposição para criar um orçamento personalizado que atenda perfeitamente às suas expectativas e necessidades.</p>
                 
-                <a href="https://wa.me/5521976714721" target="_blank" class="btn-solicitar">SOLICITAR ORÇAMENTO</a>
+                <a href="https://wa.me/5521976714721" target="_blank" class="btn-solicitar" rel="noopener noreferrer">SOLICITAR ORÇAMENTO</a>
 
                 <div class="whatsapp-contact">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -318,375 +378,17 @@
         </section>
     </main>
 
-    <script>
-        const API_URL = 'http://127.0.0.1:5000';
-        
-        const loginModal = document.getElementById('loginModal');
-        const menuModal = document.getElementById('menuModal');
-        const loginForm = document.getElementById('loginForm');
-        const loginError = document.getElementById('loginError');
-        
-        const openLogin = document.getElementById('openLogin');
-        const closeLogin = document.getElementById('closeLogin');
-        
-        const openMenu = document.getElementById('openMenu');
-        const openMenuNav = document.getElementById('openMenuNav');
-        const openMenuHero = document.getElementById('openMenuHero');
-        const closeMenu = document.getElementById('closeMenu');
-        const closeMenuToContact = document.getElementById('closeMenuToContact');
-
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.querySelectorAll('.nav-links a');
-
-        const ownerControls = document.getElementById('ownerControls');
-        const editMenuBtn = document.getElementById('editMenuBtn');
-        const saveMenuBtn = document.getElementById('saveMenuBtn');
-        const cancelEditBtn = document.getElementById('cancelEditBtn');
-        const menuContainer = document.getElementById('menuContainer');
-
-        let isOwner = !!localStorage.getItem('ownerToken');
-
-        function updateUIForOwner() {
-            const loginView = document.getElementById('loginView');
-            const ownerView = document.getElementById('ownerView');
-            const loggedInUser = document.getElementById('loggedInUser');
-            if (isOwner) {
-                ownerControls.style.display = 'flex';
-                openLogin.querySelector('span').textContent = 'Painel';
-                openLogin.classList.add('admin-active');
-                if (loginView) loginView.style.display = 'none';
-                if (ownerView) ownerView.style.display = 'block';
-                if (loggedInUser) loggedInUser.textContent = localStorage.getItem('ownerUser') || 'Proprietário';
-            } else {
-                ownerControls.style.display = 'none';
-                openLogin.querySelector('span').textContent = 'Login';
-                openLogin.classList.remove('admin-active');
-                if (loginView) loginView.style.display = 'block';
-                if (ownerView) ownerView.style.display = 'none';
-            }
-        }
-
-        function lockScroll() {
-            document.body.style.overflow = "hidden";
-            document.body.classList.add('modal-open');
-            document.documentElement.classList.add('modal-open');
-        }
-
-        function unlockScroll() {
-            document.body.style.overflow = "auto";
-            document.body.classList.remove('modal-open');
-            document.documentElement.classList.remove('modal-open');
-        }
-
-
-        // Login Logic
-        if (loginForm) {
-            loginForm.onsubmit = async function(e) {
-                e.preventDefault();
-                const usuario = document.getElementById('username').value;
-                const senha = document.getElementById('password').value;
-                
-                try {
-                    const response = await fetch(`${API_URL}/login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ usuario, senha }),
-                        credentials: 'include'
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        localStorage.setItem('ownerToken', data.token);
-                        localStorage.setItem('ownerUser', data.user);
-                        // Força a atualização do estado global antes de atualizar a UI
-                        isOwner = true; 
-                        updateUIForOwner();
-                        loginModal.style.display = "none";
-                        unlockScroll();
-                        loginForm.reset();
-                    } else {
-
-                        loginError.textContent = data.message;
-                        loginError.style.display = 'block';
-                    }
-                } catch (error) {
-                    loginError.textContent = 'Erro ao conectar ao servidor.';
-                    loginError.style.display = 'block';
-                }
-            };
-        }
-
-        // Menu Management
-        async function loadMenu() {
-            try {
-                const response = await fetch(`${API_URL}/api/menu`);
-                const items = await response.json();
-                
-                if (Array.isArray(items) && items.length > 0) {
-                    renderMenu(items);
-                }
-            } catch (error) {
-                console.error('Erro ao carregar cardápio:', error);
-            }
-        }
-
-        function renderMenu(items) {
-            const categories = {
-                'entradas': { title: 'Entradas', items: [] },
-                'principais': { title: 'Pratos Principais', items: [] },
-                'sobremesas': { title: 'Sobremesas', items: [] }
-            };
-
-            items.forEach(item => {
-                if (categories[item.categoria]) {
-                    categories[item.categoria].items.push(item);
-                }
-            });
-
-            menuContainer.innerHTML = '';
-            for (const key in categories) {
-                const cat = categories[key];
-                const section = document.createElement('div');
-                section.className = 'menu-category';
-                section.innerHTML = `
-                    <h3>${cat.title}</h3>
-                    <ul class="menu-list" data-category="${key}">
-                        ${cat.items.map(item => `
-                            <li>
-                                <span class="item-name">${item.nome}</span>
-                                <p class="item-desc">${item.descricao}</p>
-                            </li>
-                        `).join('')}
-                    </ul>
-                `;
-                menuContainer.appendChild(section);
-            }
-        }
-
-        // Edit Mode Toggle
-        editMenuBtn.onclick = () => {
-            menuModal.classList.add('editing');
-            editMenuBtn.style.display = 'none';
-            saveMenuBtn.style.display = 'inline-block';
-            cancelEditBtn.style.display = 'inline-block';
-            
-            const items = menuContainer.querySelectorAll('li');
-            items.forEach(li => {
-                const name = li.querySelector('.item-name').textContent;
-                const desc = li.querySelector('.item-desc').textContent;
-                li.innerHTML = `
-                    <input type="text" class="edit-input name-input" value="${name}">
-                    <textarea class="edit-textarea desc-input">${desc}</textarea>
-                `;
-            });
-        };
-
-        cancelEditBtn.onclick = () => {
-            menuModal.classList.remove('editing');
-            editMenuBtn.style.display = 'inline-block';
-            saveMenuBtn.style.display = 'none';
-            cancelEditBtn.style.display = 'none';
-            loadMenu(); // Recarrega original
-        };
-
-        const menuFeedback = document.getElementById('menuFeedback');
-
-        function showMenuFeedback(message, isError = false) {
-            menuFeedback.textContent = message;
-            menuFeedback.className = `menu-feedback ${isError ? 'error' : 'success'}`;
-            menuFeedback.style.display = 'block';
-            
-            setTimeout(() => {
-                menuFeedback.style.display = 'none';
-            }, 5000);
-        }
-
-        saveMenuBtn.onclick = async () => {
-            const updatedItems = [];
-            const categories = menuContainer.querySelectorAll('.menu-list');
-            
-            categories.forEach(catList => {
-                const category = catList.dataset.category;
-                const items = catList.querySelectorAll('li');
-                items.forEach(li => {
-                    updatedItems.push({
-                        categoria: category,
-                        nome: li.querySelector('.name-input').value,
-                        descricao: li.querySelector('.desc-input').value
-                    });
-                });
-            });
-
-            try {
-                const token = localStorage.getItem('ownerToken');
-                const response = await fetch(`${API_URL}/api/menu/update`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-                    },
-                    body: JSON.stringify(updatedItems)
-                });
-                
-                const data = await response.json();
-                if (data.success) {
-                    showMenuFeedback('Cardápio atualizado com sucesso!');
-                    menuModal.classList.remove('editing'); // Garante a remoção da classe de edição
-                    editMenuBtn.style.display = 'inline-block';
-                    saveMenuBtn.style.display = 'none';
-                    cancelEditBtn.style.display = 'none';
-                    loadMenu(); // Recarrega o menu do banco para travar os campos
-                } else {
-                    showMenuFeedback('Erro ao salvar: ' + data.message, true);
-                    if (data.message === 'Não autorizado') {
-                        isOwner = false;
-                        localStorage.removeItem('ownerToken');
-                        localStorage.removeItem('ownerUser');
-                        updateUIForOwner();
-                        // Importante: recarregar o menu e sair do modo edição para não ficar travado
-                        cancelEditBtn.click();
-                    }
-                }
-            } catch (error) {
-                showMenuFeedback('Erro de conexão ao salvar.', true);
-            }
-        };
-
-        // Modal Control (Existing with updates)
-        if (openLogin) {
-            openLogin.onclick = function() {
-                loginModal.style.display = "flex";
-                lockScroll();
-                loginError.style.display = 'none';
-            }
-        }
-        
-        if (closeLogin) {
-            closeLogin.onclick = function() {
-                loginModal.style.display = "none";
-                unlockScroll();
-            }
-        }
-
-        const closePanelBtn = document.getElementById('closePanelBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        
-        if (closePanelBtn) {
-            closePanelBtn.onclick = function() {
-                loginModal.style.display = "none";
-                unlockScroll();
-            }
-        }
-        
-        if (logoutBtn) {
-            logoutBtn.onclick = async function() {
-                isOwner = false;
-                localStorage.removeItem('ownerToken');
-                localStorage.removeItem('ownerUser');
-                updateUIForOwner();
-                loginModal.style.display = "none";
-                unlockScroll();
-                try {
-                    await fetch(`${API_URL}/logout`, { method: 'POST' });
-                } catch (e) {}
-            }
-        }
-
-        const panelMenuBtn = document.getElementById('panelMenuBtn');
-        if (panelMenuBtn) {
-            panelMenuBtn.onclick = function() {
-                loginModal.style.display = "none";
-                handleOpenMenu();
-            }
-        }
-
-        const handleOpenMenu = function() {
-            menuModal.style.display = "flex";
-            lockScroll();
-            if (menuToggle) menuToggle.checked = false;
-            loadMenu(); // Sempre carrega o menu atualizado
-        }
-
-        if (openMenu) openMenu.onclick = handleOpenMenu;
-        if (openMenuNav) openMenuNav.onclick = handleOpenMenu;
-        if (openMenuHero) openMenuHero.onclick = handleOpenMenu;
-
-        if (closeMenu) {
-            closeMenu.onclick = function() {
-                menuModal.style.display = "none";
-                unlockScroll();
-            }
-        }
-
-        if (closeMenuToContact) {
-            closeMenuToContact.onclick = function() {
-                menuModal.style.display = "none";
-                unlockScroll();
-            }
-        }
-        
-        window.onclick = function(event) {
-            if (event.target == loginModal) {
-                loginModal.style.display = "none";
-                unlockScroll();
-            }
-            if (event.target == menuModal && !menuModal.classList.contains('editing')) {
-                menuModal.style.display = "none";
-                unlockScroll();
-            }
-        }
-
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = document.getElementById('eyeIcon');
-
-        if (togglePassword) {
-            togglePassword.onclick = function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                
-                // Muda o ícone (opcional, aqui apenas alterna o texto/tipo)
-                if (type === 'text') {
-                    eyeIcon.innerHTML = `
-                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                        <line x1="1" y1="1" x2="23" y2="23"></line>
-                    `;
-                } else {
-                    eyeIcon.innerHTML = `
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    `;
-                }
-            };
-        }
-
-        // Initialize
-        updateUIForOwner();
-        loadMenu();
-
-        // Nav: marca link ativo conforme a seção visível
-        const sections = document.querySelectorAll('section[id]');
-        const navItems = document.querySelectorAll('.nav-links a[href^="#"]');
-
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    navItems.forEach(a => a.classList.remove('active'));
-                    const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
-                    if (active) active.classList.add('active');
-                }
-            });
-        }, { threshold: 0.4 });
-
-        sections.forEach(s => sectionObserver.observe(s));
-    </script>
-
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 Seleto Buffet</p>
+            <p>&copy; 2026 Seleto Buffet. Todos os direitos reservados.</p>
             <p>(21) 97671-4721</p>
         </div>
     </footer>
 
+    </div><!-- /#page-wrapper -->
+
+    <!-- JavaScript Application Script -->
+    <script src="script.js" defer></script>
 </body>
+</html>
