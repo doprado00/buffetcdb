@@ -50,7 +50,7 @@ html {
 body {
     line-height: 1.5;
     color: var(--dark);
-    background-color: #ffffff;
+    background-color: #efece5;
     background-image: 
         radial-gradient(at 0% 0%, hsla(43, 67%, 92%, 1) 0, transparent 50%), 
         radial-gradient(at 50% 0%, hsla(0, 0%, 100%, 1) 0, transparent 50%), 
@@ -160,6 +160,7 @@ header {
 }
 
 .logo {
+    margin-left: -70px;
     font-weight: 800;
     color: var(--dark);
     font-size: 1.5rem;
@@ -179,6 +180,8 @@ header {
 }
 
 .nav-right {
+    margin-right: -70px;
+    margin-left: 50px;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -195,6 +198,8 @@ header {
     text-transform: uppercase;
     letter-spacing: 1px;
     padding: 8px 12px;
+    margin-left: 10px;
+    margin-right: -40px;
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 6px;
     transition: var(--transition);
@@ -230,8 +235,37 @@ header {
     transition: 0.3s;
 }
 
+.zap-page {
+    padding-top: 8px;
+}
+
+.zap-icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s;
+}
+
+.zap-icon:hover {
+    transform: scale(1.1);
+}
+
+.insta-page {
+    padding-top: 8px;
+}
+
+.insta-icon {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s;
+}
+
+.insta-icon:hover {
+    transform: scale(1.1);
+}
+
 /* Navigation Menu - Mobile First */
 .nav-links {
+    transform: translateX(30px);
     position: absolute;
     top: 100%;
     left: 0;
@@ -807,15 +841,15 @@ section {
 .modal {
     display: none;
     position: fixed;
-    top: 0;
+    z-index: 1000;
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    overflow-y: auto;
 }
 
 /* Page wrapper — blurs real site content behind modals */
@@ -830,14 +864,14 @@ section {
 }
 
 .modal-content {
-    background: var(--white);
-    width: 100%;
-    max-width: 400px;
-    padding: 40px;
-    border-radius: 20px;
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 900px;
     position: relative;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: modalAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
 .close-modal {
@@ -1569,5 +1603,5 @@ footer {
    ========================================================================== */
 html.modal-open, body.modal-open {
     overflow: hidden !important;
-    height: 100% !important;
+    position: relative;
 }
