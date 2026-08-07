@@ -5,6 +5,8 @@
 
 let scrollPosition = 0;
 
+const API_URL = "http://127.0.0.1:5000";
+
 // DOM Elements - Modals & Forms
 const loginModal = document.getElementById('loginModal');
 const menuModal = document.getElementById('menuModal');
@@ -58,8 +60,14 @@ function updateUIForOwner() {
             if (span) span.textContent = 'Painel';
             openLogin.classList.add('admin-active');
         }
-        if (loginView) loginView.style.display = 'none';
-        if (ownerView) ownerView.style.display = 'block';
+        if (loginView) {
+            loginView.style.display = 'none';
+            loginView.classList.add('display-none'); // Garante consistência com o CSS
+        }
+        if (ownerView) {
+            ownerView.style.display = 'block';
+            ownerView.classList.remove('display-none'); // Remove o display-none do HTML
+        }
         if (loggedInUser) loggedInUser.textContent = localStorage.getItem('ownerUser') || 'Proprietário';
     } else {
         if (ownerControls) ownerControls.style.display = 'none';
@@ -68,8 +76,14 @@ function updateUIForOwner() {
             if (span) span.textContent = 'Login';
             openLogin.classList.remove('admin-active');
         }
-        if (loginView) loginView.style.display = 'block';
-        if (ownerView) ownerView.style.display = 'none';
+        if (loginView) {
+            loginView.style.display = 'block';
+            loginView.classList.remove('display-none');
+        }
+        if (ownerView) {
+            ownerView.style.display = 'none';
+            ownerView.classList.add('display-none');
+        }
     }
 }
 
@@ -131,9 +145,12 @@ if (loginForm) {
                 localStorage.setItem('ownerToken', data.token);
                 localStorage.setItem('ownerUser', data.user);
                 isOwner = true;
-                updateUIForOwner();
-                if (loginModal) loginModal.style.display = 'none';
-                unlockScroll();
+                updateUIForOwner(); // Atualiza a tela para mostrar o Painel
+                
+                // REMOVIDO: A linha que fechava o modal automaticamente
+                // Agora o usuário consegue ver a transição para o Painel
+                
+                if (loginError) loginError.style.display = 'none'; // Limpa erros anteriores
                 loginForm.reset();
             } else {
                 if (loginError) {
@@ -383,6 +400,7 @@ if (saveMenuBtn) {
 if (openLogin) {
     openLogin.onclick = function (e) {
         e.preventDefault();
+        updateUIForOwner(); // Garante que a view correta apareça ao abrir o modal
         if (loginModal) loginModal.style.display = 'flex';
         lockScroll();
         if (loginError) loginError.style.display = 'none';

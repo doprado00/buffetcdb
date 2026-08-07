@@ -1,12 +1,8 @@
-"""
-Buffet Elegance / Seleto Buffet - Backend API Server
-Flask application providing authentication, owner panel logic, and dynamic menu API.
-"""
-
 import os
 import jwt
 import datetime
-import sqlite3
+import mysql.connector
+from mysql.connector import Error
 from flask import Flask, request, jsonify, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_cors import CORS
@@ -26,8 +22,13 @@ CORS(app, supports_credentials=True, origins=[
     "http://localhost:8000"
 ])
 
-DATABASE_FILE = 'buffet.db'
-
+# Configuração de Conexão com o MySQL 8.0
+MYSQL_CONFIG = {
+    'host': 'localhost',
+    'user': 'root',               # Substitua pelo seu usuário do MySQL se for diferente
+    'password': '#Gui078383',  # Substitua pela sua senha do MySQL
+    'database': 'buffet_elegance'
+}
 
 # ==========================================
 # Database Helpers & Initialization
@@ -35,57 +36,54 @@ DATABASE_FILE = 'buffet.db'
 
 def get_db_connection():
     """
-    Creates and returns a connection to the SQLite database with Row factory enabled.
+    Cria e retorna a conexão com o banco MySQL.
     """
-    conn = sqlite3.connect(DATABASE_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return mysql.connector.connect(**MYSQL_CONFIG)
 
 
 def init_db():
     """
-    Initializes database tables and inserts default admin accounts and initial menu items if empty.
+    Inicializa as tabelas do MySQL e insere dados padrões se estiverem vazias.
     """
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
 
-    # Table for owners / admins
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS proprietarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            usuario TEXT UNIQUE NOT NULL,
-            senha_hash TEXT NOT NULL
-        )
-    """)
+        # Tabela de proprietários / admins
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS proprietarios (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                usuario VARCHAR(255) UNIQUE NOT NULL,
+                senha_hash VARCHAR(255) NOT NULL
+            )
+        """)
 
-    # Table for menu items
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS cardapio (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            categoria TEXT NOT NULL,
-            nome TEXT NOT NULL,
-            descricao TEXT
-        )
-    """)
+        # Tabela do cardápio
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS cardapio (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                categoria VARCHAR(100) NOT NULL,
+                nome VARCHAR(255) NOT NULL,
+                descricao TEXT
+            )
+        """)
 
-    # Ensure 'admin' user exists
-    cursor.execute("SELECT COUNT(*) FROM proprietarios WHERE usuario = 'admin'")
-    if cursor.fetchone()[0] == 0:
-        senha_hash = generate_password_hash('admin123')
-        cursor.execute("INSERT INTO proprietarios (usuario, senha_hash) VALUES ('admin', ?)", (senha_hash,))
+        # Garantir usuário 'admin'
+        cursor.execute("SELECT COUNT(*) AS total FROM proprietarios WHERE usuario = 'admin'")
+        if cursor.fetchone()['total'] == 0:
+            senha_hash = generate_password_hash('admin123')
+            cursor.execute("INSERT INTO proprietarios (usuario, senha_hash) VALUES (%s, %s)", ('admin', senha_hash))
 
-    # Ensure 'crisodarp' user exists
-    cursor.execute("SELECT COUNT(*) FROM proprietarios WHERE usuario = 'crisodarp'")
-    if cursor.fetchone()[0] == 0:
-        senha_hash = generate_password_hash('odarpbuffet1202')
-        cursor.execute("INSERT INTO proprietarios (usuario, senha_hash) VALUES ('crisodarp', ?)", (senha_hash,))
+        # Garantir usuário 'crisodarp'
+        cursor.execute("SELECT COUNT(*) AS total FROM proprietarios WHERE usuario = 'crisodarp'")
+        if cursor.fetchone()['total'] == 0:
+            senha_hash = generate_password_hash('odarpbuffet1202')
+            cursor.execute("INSERT INTO proprietarios (usuario, senha_hash) VALUES (%s, %s)", ('crisodarp', senha_hash))
 
-    # Insert default sample menu if empty
-    cursor.execute("SELECT COUNT(*) FROM cardapio")
-    if cursor.fetchone()[0] == 0:
-        cursor.executemany(
-            "INSERT INTO cardapio (categoria, nome, descricao) VALUES (?, ?, ?)",
-            [
+        # Inserir cardápio padrão se estiver vazio
+        cursor.execute("SELECT COUNT(*) AS total FROM cardapio")
+        if cursor.fetchone()['total'] == 0:
+            itens_padrao = [
                 ('entradas', 'Canapés de Salmão Defumado', 'Com cream cheese e raspas de limão siciliano'),
                 ('entradas', 'Bruschettas de Cogumelos', 'Mix de cogumelos frescos com azeite de trufas'),
                 ('principais', 'Filé Mignon ao Molho Madeira', 'Acompanhado de risoto de parmesão'),
@@ -93,10 +91,17 @@ def init_db():
                 ('sobremesas', 'Petit Gâteau de Chocolate Belga', 'Com sorvete artesanal de baunilha'),
                 ('sobremesas', 'Cheesecake de Frutas Vermelhas', 'Com calda artesanal e base crocante')
             ]
-        )
+            cursor.executemany(
+                "INSERT INTO cardapio (categoria, nome, descricao) VALUES (%s, %s, %s)",
+                itens_padrao
+            )
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("Banco de dados MySQL inicializado com sucesso!")
+    except Error as e:
+        print(f"Erro ao inicializar o MySQL: {e}")
 
 
 # Initialize DB upon script load
@@ -112,7 +117,11 @@ def verify_token(token):
     Decodes and validates JWT authentication tokens.
     """
     try:
-        payload = jwt.decode(token, app.secret_key, algorithms=['HS256'])
+        # Trata o envio do cabeçalho caso venha como "Bearer <token>"
+        if token.startswith("Bearer "):
+            token = token.split(" ")[1]
+            
+        jwt.decode(token, app.secret_key, algorithms=['HS256'])
         return True
     except jwt.ExpiredSignatureError:
         return False
@@ -138,15 +147,16 @@ def login():
 
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM proprietarios WHERE usuario = ?", (usuario,))
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM proprietarios WHERE usuario = %s", (usuario,))
         user = cursor.fetchone()
+        cursor.close()
         conn.close()
 
         if user and check_password_hash(user['senha_hash'], senha):
             token = jwt.encode({
                 'user': usuario,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+                'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=24)
             }, app.secret_key, algorithm='HS256')
 
             return jsonify({
@@ -169,9 +179,10 @@ def get_menu():
     """
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM cardapio ORDER BY categoria, id")
-        items = [dict(row) for row in cursor.fetchall()]
+        items = cursor.fetchall()
+        cursor.close()
         conn.close()
         return jsonify(items), 200
     except Exception as e:
@@ -200,14 +211,16 @@ def update_menu():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("DELETE FROM cardapio")
+        # Limpa o cardápio e insere os novos itens
+        cursor.execute("TRUNCATE TABLE cardapio")
         for item in items:
             cursor.execute(
-                "INSERT INTO cardapio (categoria, nome, descricao) VALUES (?, ?, ?)",
+                "INSERT INTO cardapio (categoria, nome, descricao) VALUES (%s, %s, %s)",
                 (item['categoria'], item['nome'], item['descricao'])
             )
 
         conn.commit()
+        cursor.close()
         conn.close()
         return jsonify({"success": True, "message": "Cardápio atualizado!"}), 200
     except Exception as e:
