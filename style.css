@@ -16,6 +16,9 @@
    12. Footer
    13. Animations
    14. Global Modal State
+   15. Global Modal Scroll Lock
+   16. "TogglePassword" icon (Chrome, Edge, Opera, Safari)
+   17. Owner Panel
    ========================================================================== */
 
 /* ==========================================================================
@@ -1604,4 +1607,217 @@ footer {
 html.modal-open, body.modal-open {
     overflow: hidden !important;
     position: relative;
+}
+
+
+/* ==========================================================================
+   16. Retirar icone nativo de "mostrar senha" do navegador (Chrome, Edge, Opera, Safari)
+   ========================================================================== */
+
+/* Remove todos os ícones nativos de senha */
+input[type="password"]::-ms-reveal {
+    display: none !important;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Para navegadores baseados em Chromium (Chrome, Edge, Opera) */
+input[type="password"]::-webkit-input-password-toggle {
+    display: none !important;
+}
+
+/* ==========================================
+   17. Painel do Proprietário - Centralizado e Elegante
+   ========================================== */
+
+#ownerView {
+    /* REMOVIDO o display: flex !important que causava o bug */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+/* Quando o ownerView estiver visível (sem a classe display-none), usa flex */
+#ownerView:not(.display-none) {
+    display: flex !important;
+}
+
+/* Card interno para agrupar o conteúdo */
+#ownerView .modal-header {
+    margin-bottom: 30px;
+}
+
+#ownerView .modal-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #f9f3e3 0%, #f0e6c8 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+#ownerView .owner-icon-svg {
+    width: 40px;
+    height: 40px;
+    stroke: #b8860b;
+    stroke-width: 1.5;
+}
+
+#ownerView h2 {
+    font-size: 1.8rem;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+#ownerView .user-logged-info {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 0;
+}
+
+#ownerView .user-logged-name {
+    color: #b8860b;
+    font-weight: 600;
+}
+
+.user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f9f0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #d4edda;
+}
+
+.online-dot {
+    width: 8px;
+    height: 8px;
+    background: #28a745;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#ownerView .owner-actions {
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.owner-divider {
+    width: 100%;
+    margin: 5px 0; /* ← Reduzido de 30px para 15px */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.owner-divider svg {
+    width: 100%;
+    max-width: 300px;
+    height: 30px;
+    display: block;
+}
+
+/* Linha dos botões Cardápio e Galeria */
+#ownerView .owner-btn-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+#ownerView .owner-btn-row .btn-panel-tab {
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: 2px solid #b8860b;
+    background: transparent;
+    color: #b8860b;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#ownerView .owner-btn-row .btn-panel-tab:hover {
+    background: #b8860b;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+}
+
+/* Botão Voltar ao Site (secundário) */
+#ownerView .btn-full-width {
+    padding: 14px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: #fcfcfc;
+    color: #b8860b;
+    border: 2px solid #b8860b;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#ownerView .btn-full-width:hover {
+    background: #b5fdc0;
+    color: #007326;
+    border-color: #007326;
+}
+
+/* Botão Sair da Conta (discreto, no final) */
+#ownerView .btn-logout {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #b8860b;
+    background: transparent;
+    border: 2px solid #b8860b;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+#ownerView .btn-logout:hover {
+    color: #c33;
+    border-color: #c33;
+    background: #ffbbbb;
+}
+
+/* ==========================================
+   Ajuste no Modal de Login para ficar consistente
+   ========================================== */
+
+.login-modal-content {
+    padding: 40px 30px;
+    position: relative;
+}
+
+/* Garante que o modal tenha altura mínima para centralizar */
+#loginModal .modal-content {
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

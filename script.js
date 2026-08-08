@@ -4,7 +4,6 @@
  */
 
 let scrollPosition = 0;
-
 const API_URL = "http://127.0.0.1:5000";
 
 // DOM Elements - Modals & Forms
@@ -45,37 +44,52 @@ let isOwner = !!localStorage.getItem('ownerToken');
    UI & Scroll Management
    ========================================== */
 
-/**
- * Updates UI layout and panel depending on owner authentication state
- */
 function updateUIForOwner() {
     const loginView = document.getElementById('loginView');
     const ownerView = document.getElementById('ownerView');
     const loggedInUser = document.getElementById('loggedInUser');
+    const ownerControls = document.getElementById('ownerControls'); // Garante que pegamos os controles do cardápio
 
     if (isOwner) {
-        if (ownerControls) ownerControls.style.display = 'flex';
+        // 1. MOSTRAR controles de edição do cardápio
+        if (ownerControls) {
+            ownerControls.classList.remove('display-none'); // ← REMOVE a classe que esconde
+            ownerControls.style.display = 'flex';           // ← Força a exibição
+        }
+        
+        // 2. Atualizar botão do header
         if (openLogin) {
             const span = openLogin.querySelector('span');
             if (span) span.textContent = 'Painel';
             openLogin.classList.add('admin-active');
         }
+        
+        // 3. Trocar a visão do modal de login para a visão de proprietário
         if (loginView) {
             loginView.style.display = 'none';
-            loginView.classList.add('display-none'); // Garante consistência com o CSS
+            loginView.classList.add('display-none');
         }
         if (ownerView) {
             ownerView.style.display = 'block';
-            ownerView.classList.remove('display-none'); // Remove o display-none do HTML
+            ownerView.classList.remove('display-none');
         }
         if (loggedInUser) loggedInUser.textContent = localStorage.getItem('ownerUser') || 'Proprietário';
+        
     } else {
-        if (ownerControls) ownerControls.style.display = 'none';
+        // 1. ESCONDER controles de edição do cardápio
+        if (ownerControls) {
+            ownerControls.classList.add('display-none');    // ← ADICIONA a classe que esconde
+            ownerControls.style.display = 'none';           // ← Força a ocultação
+        }
+        
+        // 2. Atualizar botão do header
         if (openLogin) {
             const span = openLogin.querySelector('span');
             if (span) span.textContent = 'Login';
             openLogin.classList.remove('admin-active');
         }
+        
+        // 3. Trocar a visão do modal de volta para o formulário de login
         if (loginView) {
             loginView.style.display = 'block';
             loginView.classList.remove('display-none');
@@ -87,13 +101,8 @@ function updateUIForOwner() {
     }
 }
 
-/**
- * Prevents background page scroll when a modal is open
- */
 function lockScroll() {
     scrollPosition = window.scrollY || window.pageYOffset;
-    // Fix body in place at the current scroll offset so the backdrop-filter
-    // shows the correct part of the page (not just the top)
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollPosition}px`;
@@ -105,11 +114,7 @@ function lockScroll() {
     document.documentElement.classList.add('modal-open');
 }
 
-/**
- * Restores background page scroll when modals close
- */
 function unlockScroll() {
-    // Remove fixed positioning and instantly restore scroll position
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.left = '';
@@ -131,6 +136,13 @@ if (loginForm) {
         const usuario = document.getElementById('username').value;
         const senha = document.getElementById('password').value;
 
+        // Esconde a mensagem de erro anterior ao tentar logar
+        if (loginError) {
+            loginError.style.display = 'none';
+            loginError.classList.add('display-none');
+            loginError.textContent = '';
+        }
+
         try {
             const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
@@ -145,23 +157,28 @@ if (loginForm) {
                 localStorage.setItem('ownerToken', data.token);
                 localStorage.setItem('ownerUser', data.user);
                 isOwner = true;
-                updateUIForOwner(); // Atualiza a tela para mostrar o Painel
+                updateUIForOwner();
                 
-                // REMOVIDO: A linha que fechava o modal automaticamente
-                // Agora o usuário consegue ver a transição para o Painel
+                // Fecha o modal e destrava a rolagem da página
+                if (loginModal) loginModal.style.display = 'none';
+                unlockScroll();
                 
-                if (loginError) loginError.style.display = 'none'; // Limpa erros anteriores
+                if (loginError) loginError.style.display = 'none';
                 loginForm.reset();
             } else {
+                // MOSTRA a mensagem de erro (remove a classe display-none)
                 if (loginError) {
-                    loginError.textContent = data.message;
-                    loginError.style.display = 'block';
+                    loginError.textContent = data.message || 'Usuário ou senha inválidos';
+                    loginError.classList.remove('display-none'); // ← REMOVE a classe que esconde
+                    loginError.style.display = 'block';           // ← Força a exibição
                 }
             }
         } catch (error) {
+            // MOSTRA mensagem de erro de conexão
             if (loginError) {
-                loginError.textContent = 'Erro ao conectar ao servidor.';
-                loginError.style.display = 'block';
+                loginError.textContent = 'Erro ao conectar ao servidor. Tente novamente mais tarde.';
+                loginError.classList.remove('display-none'); // ← REMOVE a classe que esconde
+                loginError.style.display = 'block';           // ← Força a exibição
             }
         }
     };
@@ -206,9 +223,6 @@ if (togglePassword) {
    Menu Data & Management
    ========================================== */
 
-/**
- * Fetches menu items from backend API
- */
 async function loadMenu() {
     try {
         const response = await fetch(`${API_URL}/api/menu`);
@@ -222,9 +236,6 @@ async function loadMenu() {
     }
 }
 
-/**
- * Helper to get SVG decorative dividers per menu category
- */
 function getDividerSvg(key) {
     if (key === 'principais') {
         return `<div class="category-divider">
@@ -253,9 +264,6 @@ function getDividerSvg(key) {
     }
 }
 
-/**
- * Renders structured HTML for menu categories and items
- */
 function renderMenu(items) {
     if (!menuContainer) return;
 
@@ -293,9 +301,6 @@ function renderMenu(items) {
     }
 }
 
-/**
- * Displays status feedback messages in the menu modal
- */
 function showMenuFeedback(message, isError = false) {
     if (!menuFeedback) return;
     menuFeedback.textContent = message;
@@ -312,9 +317,20 @@ if (editMenuBtn) {
     editMenuBtn.onclick = () => {
         menuModal.classList.add('editing');
         editMenuBtn.style.display = 'none';
-        if (saveMenuBtn) saveMenuBtn.style.display = 'inline-block';
-        if (cancelEditBtn) cancelEditBtn.style.display = 'inline-block';
+        
+        // Mostra o botão SALVAR (remove a classe que esconde)
+        if (saveMenuBtn) {
+            saveMenuBtn.classList.remove('display-none');
+            saveMenuBtn.style.display = 'inline-block';
+        }
+        
+        // Mostra o botão CANCELAR (remove a classe que esconde)
+        if (cancelEditBtn) {
+            cancelEditBtn.classList.remove('display-none');
+            cancelEditBtn.style.display = 'inline-block';
+        }
 
+        // Transforma os itens do cardápio em campos editáveis
         const items = menuContainer.querySelectorAll('li');
         items.forEach(li => {
             const name = li.querySelector('.item-name').textContent;
@@ -330,10 +346,21 @@ if (editMenuBtn) {
 if (cancelEditBtn) {
     cancelEditBtn.onclick = () => {
         menuModal.classList.remove('editing');
+        
+        // Mostra o botão EDITAR novamente
         if (editMenuBtn) editMenuBtn.style.display = 'inline-block';
-        if (saveMenuBtn) saveMenuBtn.style.display = 'none';
-        cancelEditBtn.style.display = 'none';
-        loadMenu();
+        
+        // Esconde SALVAR e CANCELAR (readiciona a classe que esconde)
+        if (saveMenuBtn) {
+            saveMenuBtn.style.display = 'none';
+            saveMenuBtn.classList.add('display-none');
+        }
+        if (cancelEditBtn) {
+            cancelEditBtn.style.display = 'none';
+            cancelEditBtn.classList.add('display-none');
+        }
+        
+        loadMenu(); // Recarrega o cardápio original
     };
 }
 
@@ -373,9 +400,19 @@ if (saveMenuBtn) {
             if (data.success) {
                 showMenuFeedback('Cardápio atualizado com sucesso!');
                 menuModal.classList.remove('editing');
+                
+                // Reseta os botões para o estado normal
                 if (editMenuBtn) editMenuBtn.style.display = 'inline-block';
-                saveMenuBtn.style.display = 'none';
-                if (cancelEditBtn) cancelEditBtn.style.display = 'none';
+                
+                if (saveMenuBtn) {
+                    saveMenuBtn.style.display = 'none';
+                    saveMenuBtn.classList.add('display-none');
+                }
+                if (cancelEditBtn) {
+                    cancelEditBtn.style.display = 'none';
+                    cancelEditBtn.classList.add('display-none');
+                }
+                
                 loadMenu();
             } else {
                 showMenuFeedback('Erro ao salvar: ' + data.message, true);
@@ -400,7 +437,7 @@ if (saveMenuBtn) {
 if (openLogin) {
     openLogin.onclick = function (e) {
         e.preventDefault();
-        updateUIForOwner(); // Garante que a view correta apareça ao abrir o modal
+        updateUIForOwner();
         if (loginModal) loginModal.style.display = 'flex';
         lockScroll();
         if (loginError) loginError.style.display = 'none';
@@ -486,43 +523,30 @@ if (sections.length > 0) {
     sections.forEach(s => sectionObserver.observe(s));
 }
 
-// Função para reanimar os elementos do header
+/* ==========================================
+   Header Animation (ONLY ON PAGE LOAD)
+   ========================================== */
+
 function animarElementosHeader() {
     const elementos = document.querySelectorAll('.header-element, .header-logo');
     
     elementos.forEach((el, index) => {
-        // Remove a animação
         el.style.animation = 'none';
+        void el.offsetWidth; // Força o reflow
         
-        // Força o reflow
-        void el.offsetWidth;
-        
-        // Reaplica a animação com delay baseado na posição
         setTimeout(() => {
             if (el.classList.contains('header-logo')) {
                 el.style.animation = 'fadeInScale 0.8s ease-out forwards';
             } else {
                 el.style.animation = `fadeInUp 0.6s ease-out forwards`;
             }
-        }, index * 100); // 100ms de delay entre cada elemento
+        }, index * 100);
     });
 }
 
-// 1. Ao carregar a página
+// ÚNICO gatilho da animação: quando a página carrega
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(animarElementosHeader, 100); // Pequeno delay para garantir que carregou
-});
-
-// 2. Ao fechar modal do Cardápio
-document.getElementById('closeMenu').addEventListener('click', function() {
-    document.getElementById('menuModal').style.display = 'none';
-    animarElementosHeader();
-});
-
-// 3. Ao fechar modal de Login
-document.getElementById('closeLogin').addEventListener('click', function() {
-    document.getElementById('loginModal').style.display = 'none';
-    animarElementosHeader();
+    setTimeout(animarElementosHeader, 100);
 });
 
 /* ==========================================

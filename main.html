@@ -85,7 +85,7 @@
                     <h2>Acesso Restrito</h2>
                     <p>Identifique-se para gerenciar o sistema</p>
                 </div>
-                <form id="loginForm" class="login-form">
+                <form id="loginForm" class="login-form" autocomplete="off">
                     <div class="input-group">
                         <label for="username">Usuário</label>
                         <div class="input-with-icon">
@@ -128,8 +128,42 @@
                         </svg>
                     </div>
                     <h2>Painel do Proprietário</h2>
-                    <p class="user-logged-info">Você está conectado como: <strong id="loggedInUser" class="user-logged-name">admin</strong></p>
+                    <p class="user-logged-info">Você está conectado como: <span class="user-badge">
+                            <span class="online-dot"></span>
+                            <strong id="loggedInUser" class="user-logged-name">admin</strong>
+                        </span>
+                    </p>
                 </div>
+
+                <div class="owner-divider">
+                    <svg viewBox="0 0 300 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Linha esquerda -->
+                        <line x1="10" y1="15" x2="90" y2="15" stroke="#d4af37" stroke-width="2" opacity="0.6"/>
+                        
+                        <!-- Ponto decorativo esquerdo -->
+                        <circle cx="100" cy="15" r="2" fill="#d4af37"/>
+                        
+                        <!-- Ornamento esquerdo (folha) -->
+                        <path d="M110 15 C115 10, 120 10, 125 15 C120 20, 115 20, 110 15" 
+                            stroke="#b8860b" stroke-width="1.2" fill="none"/>
+                        
+                        <!-- Elemento central (losango) -->
+                        <path d="M140 15 L150 8 L160 15 L150 22 Z" 
+                            stroke="#b8860b" stroke-width="1.5" fill="none"/>
+                        <circle cx="150" cy="15" r="2.5" fill="#d4af37"/>
+                        
+                        <!-- Ornamento direito (folha) -->
+                        <path d="M175 15 C180 10, 185 10, 190 15 C185 20, 180 20, 175 15" 
+                            stroke="#b8860b" stroke-width="1.2" fill="none"/>
+                        
+                        <!-- Ponto decorativo direito -->
+                        <circle cx="200" cy="15" r="2" fill="#d4af37"/>
+                        
+                        <!-- Linha direita -->
+                        <line x1="210" y1="15" x2="290" y2="15" stroke="#d4af37" stroke-width="2" opacity="0.6"/>
+                    </svg>
+                </div>
+
                 <div class="owner-actions">
                     <button id="closePanelBtn" class="btn btn-full-width">VOLTAR AO SITE</button>
                     <div class="owner-btn-row">
