@@ -491,6 +491,14 @@ if (closeMenuToContact) {
     };
 }
 
+const panelGalleryBtn = document.getElementById('panelGalleryBtn');
+if (panelGalleryBtn) {
+    panelGalleryBtn.onclick = function (e) {
+        e.preventDefault();
+        window.location.href = 'galeria.html';
+    };
+}
+
 window.onclick = function (event) {
     if (event.target === loginModal) {
         loginModal.style.display = 'none';
@@ -499,6 +507,10 @@ window.onclick = function (event) {
     if (event.target === menuModal && !menuModal.classList.contains('editing')) {
         menuModal.style.display = 'none';
         unlockScroll();
+    }
+    const galleryLightbox = document.getElementById('galleryLightbox');
+    if (event.target === galleryLightbox) {
+        galleryLightbox.classList.remove('active');
     }
 };
 
@@ -548,6 +560,99 @@ function animarElementosHeader() {
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(animarElementosHeader, 100);
 });
+
+/* ==========================================
+   Scroll Indicator Hiding Logic
+   ========================================== */
+
+function setupScrollIndicators() {
+    const heroIndicator = document.querySelector('.hero-scroll-indicator');
+    const menuIndicator = document.querySelector('.menu-scroll-indicator');
+
+    // Ao rolar a página principal, esconde o indicador do hero permanentemente
+    if (heroIndicator) {
+        const handleWindowScroll = () => {
+            if (window.scrollY > 10) {
+                heroIndicator.classList.add('is-scrolling');
+                window.removeEventListener('scroll', handleWindowScroll);
+            }
+        };
+        window.addEventListener('scroll', handleWindowScroll, { passive: true });
+    }
+
+    // Ao rolar o modal do cardápio, esconde o indicador do cardápio permanentemente
+    const menuModalContent = document.querySelector('.menu-modal-content');
+    if (menuModalContent && menuIndicator) {
+        const handleModalScroll = () => {
+            if (menuModalContent.scrollTop > 10) {
+                menuIndicator.classList.add('is-scrolling');
+                menuModalContent.removeEventListener('scroll', handleModalScroll);
+            }
+        };
+        menuModalContent.addEventListener('scroll', handleModalScroll, { passive: true });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupScrollIndicators();
+    setupGallery();
+});
+
+/* ==========================================
+   Gallery Interactive Logic (Filters & Lightbox)
+   ========================================== */
+
+function setupGallery() {
+    const filterBtns = document.querySelectorAll('.gallery-filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('galleryLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxDesc = document.getElementById('lightboxDesc');
+    const closeLightbox = document.getElementById('closeLightbox');
+
+    // 1. Filtragem dinâmica das categorias
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+
+            galleryItems.forEach(item => {
+                const category = item.getAttribute('data-category');
+                if (filter === 'all' || category === filter) {
+                    item.style.display = 'block';
+                    item.style.animation = 'fadeIn 0.4s ease forwards';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // 2. Lightbox dinâmico para zoom na imagem
+    galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const img = item.querySelector('img');
+            const title = item.getAttribute('data-title');
+            const desc = item.getAttribute('data-desc');
+
+            if (lightbox && lightboxImg && img) {
+                lightboxImg.src = img.src;
+                if (lightboxTitle) lightboxTitle.textContent = title || '';
+                if (lightboxDesc) lightboxDesc.textContent = desc || '';
+                lightbox.classList.add('active');
+            }
+        });
+    });
+
+    if (closeLightbox && lightbox) {
+        closeLightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+    }
+}
 
 /* ==========================================
    Initialization

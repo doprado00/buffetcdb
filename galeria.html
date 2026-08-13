@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buffet em Bangu | Seleto Buffet - Eventos Inesquecíveis</title>
-    <meta name="description" content="O melhor buffet em Bangu para casamentos, festas e eventos corporativos. Gastronomia de alta qualidade e atendimento impecável no Rio de Janeiro.">
+    <title>Galeria de Fotos | Seleto Buffet Bangu</title>
+    <meta name="description" content="Confira nossa galeria de fotos com momentos inesquecíveis, decoração elegante e pratos exclusivos do Seleto Buffet em Bangu.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="gallery-page">
 
     <div id="page-wrapper">
 
-    <!-- Header & Navigation -->
+    <!-- Header & Navigation (Idêntico ao do site principal) -->
     <header>
         <div class="container nav-container">
             <div class="logo header-logo">
@@ -26,17 +26,16 @@
 
             <nav class="nav-links">
                 <ul>
-                    <li><a href="#home" class="header-element">Início</a></li>
-                    <li><a href="#sobre" class="header-element">Sobre</a></li>
-                    <li><a href="#servicos" class="header-element">Serviços</a></li>
+                    <li><a href="main.html#home" class="header-element">Início</a></li>
+                    <li><a href="main.html#sobre" class="header-element">Sobre</a></li>
+                    <li><a href="main.html#servicos" class="header-element">Serviços</a></li>
                     <li><a href="javascript:void(0)" id="openMenuNav" class="header-element">Cardápio</a></li>
-                    <li><a href="galeria.html" class="header-element">Galeria</a></li>    
-                    <li><a href="#contato" class="header-element">Contato</a></li>
+                    <li><a href="galeria.html" class="header-element active">Galeria</a></li>    
+                    <li><a href="main.html#contato" class="header-element">Contato</a></li>
                 </ul>
             </nav>
 
             <div class="nav-right header-element">
-
                 <a href="https://wa.me/5521976714721" target="_blank" class="zap-page" rel="noopener noreferrer">
                     <img src="imagens/whatsapp_foto.png" alt="WhatsApp Seleto" class="zap-icon">
                 </a>   
@@ -60,14 +59,102 @@
                     <span></span>
                 </label>
             </div>
-
-
-
-
         </div>
     </header>
 
-    </div><!-- /#page-wrapper -->
+    <!-- Main Content -->
+    <main class="gallery-main-page container">
+        <!-- Hero Header da Galeria -->
+        <div class="gallery-page-header text-center">
+            <h1 class="section-title">NOSSA GALERIA DE FOTOS</h1>
+            <p class="gallery-page-intro">Explore registros exclusivos dos nossos eventos, decoração impecável e gastronomia de alta qualidade em Bangu.</p>
+            <div class="decorative-ornament">
+                <svg viewBox="0 0 200 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 10 L80 10 M120 10 L200 10" stroke="#b8860b" stroke-width="1.5"/>
+                    <circle cx="100" cy="10" r="4" fill="#b8860b"/>
+                    <circle cx="88" cy="10" r="2.5" fill="#d4af37"/>
+                    <circle cx="112" cy="10" r="2.5" fill="#d4af37"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Filtros da Galeria -->
+        <div class="gallery-filters">
+            <button class="gallery-filter-btn active" data-filter="all">Todos</button>
+            <button class="gallery-filter-btn" data-filter="pratos">Gastronomia</button>
+            <button class="gallery-filter-btn" data-filter="eventos">Eventos</button>
+            <button class="gallery-filter-btn" data-filter="decoracao">Decoração</button>
+        </div>
+
+        <!-- Grid de Fotos -->
+        <div class="gallery-grid">
+            <div class="gallery-item" data-category="pratos" data-title="Canapés Finos de Salmão" data-desc="Apresentação sofisticada para recepção de convidados">
+                <img src="imagens/cardapio.png" alt="Canapés Finos">
+                <div class="gallery-overlay">
+                    <div class="gallery-info">
+                        <span class="gallery-tag">Gastronomia</span>
+                        <h3>Canapés Finos de Salmão</h3>
+                    </div>
+                    <span class="gallery-zoom-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="eventos" data-title="Buffet para Casamentos" data-desc="Banquete completo com serviço de alta gastronomia">
+                <img src="imagens/sobre.png" alt="Evento de Casamento">
+                <div class="gallery-overlay">
+                    <div class="gallery-info">
+                        <span class="gallery-tag">Eventos</span>
+                        <h3>Mesa Principal de Casamento</h3>
+                    </div>
+                    <span class="gallery-zoom-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="decoracao" data-title="Ambientação Clássica" data-desc="Detalhamento elegante com iluminação cênica e flores">
+                <img src="imagens/serviços.png" alt="Ambientação e Decoração">
+                <div class="gallery-overlay">
+                    <div class="gallery-info">
+                        <span class="gallery-tag">Decoração</span>
+                        <h3>Ambientação Clássica</h3>
+                    </div>
+                    <span class="gallery-zoom-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="pratos" data-title="Pratos Principais Exclusivos" data-desc="Filé Mignon ao molho especial e acompanhamentos">
+                <img src="imagens/{C45C280B-FEAB-4109-89C3-01CAD57211D2}.png" alt="Pratos Principais">
+                <div class="gallery-overlay">
+                    <div class="gallery-info">
+                        <span class="gallery-tag">Gastronomia</span>
+                        <h3>Pratos Principais Exclusivos</h3>
+                    </div>
+                    <span class="gallery-zoom-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="eventos" data-title="Recepção Corporativa" data-desc="Atendimento ágil e pratos selecionados para eventos empresariais">
+                <img src="imagens/contato.png" alt="Recepção Corporativa">
+                <div class="gallery-overlay">
+                    <div class="gallery-info">
+                        <span class="gallery-tag">Eventos</span>
+                        <h3>Recepção Corporativa</h3>
+                    </div>
+                    <span class="gallery-zoom-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="decoracao" data-title="Mesa de Sobremesas Artesanais" data-desc="Seleção de doces e sobremesas em alta apresentação">
+                <img src="imagens/cardapio.png" alt="Mesa de Sobremesas">
+                <div class="gallery-overlay">
+                    <div class="gallery-info">
+                        <span class="gallery-tag">Decoração</span>
+                        <h3>Mesa de Sobremesas</h3>
+                    </div>
+                    <span class="gallery-zoom-icon">🔍</span>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <!-- Modal de Login -->
     <div id="loginModal" class="modal">
@@ -137,29 +224,13 @@
 
                 <div class="owner-divider">
                     <svg viewBox="0 0 300 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Linha esquerda -->
                         <line x1="10" y1="15" x2="90" y2="15" stroke="#d4af37" stroke-width="2" opacity="0.6"/>
-                        
-                        <!-- Ponto decorativo esquerdo -->
                         <circle cx="100" cy="15" r="2" fill="#d4af37"/>
-                        
-                        <!-- Ornamento esquerdo (folha) -->
-                        <path d="M110 15 C115 10, 120 10, 125 15 C120 20, 115 20, 110 15" 
-                            stroke="#b8860b" stroke-width="1.2" fill="none"/>
-                        
-                        <!-- Elemento central (losango) -->
-                        <path d="M140 15 L150 8 L160 15 L150 22 Z" 
-                            stroke="#b8860b" stroke-width="1.5" fill="none"/>
+                        <path d="M110 15 C115 10, 120 10, 125 15 C120 20, 115 20, 110 15" stroke="#b8860b" stroke-width="1.2" fill="none"/>
+                        <path d="M140 15 L150 8 L160 15 L150 22 Z" stroke="#b8860b" stroke-width="1.5" fill="none"/>
                         <circle cx="150" cy="15" r="2.5" fill="#d4af37"/>
-                        
-                        <!-- Ornamento direito (folha) -->
-                        <path d="M175 15 C180 10, 185 10, 190 15 C185 20, 180 20, 175 15" 
-                            stroke="#b8860b" stroke-width="1.2" fill="none"/>
-                        
-                        <!-- Ponto decorativo direito -->
+                        <path d="M175 15 C180 10, 185 10, 190 15 C185 20, 180 20, 175 15" stroke="#b8860b" stroke-width="1.2" fill="none"/>
                         <circle cx="200" cy="15" r="2" fill="#d4af37"/>
-                        
-                        <!-- Linha direita -->
                         <line x1="210" y1="15" x2="290" y2="15" stroke="#d4af37" stroke-width="2" opacity="0.6"/>
                     </svg>
                 </div>
@@ -206,7 +277,6 @@
             <div id="menuFeedback" class="menu-feedback display-none"></div>
 
             <div class="menu-categories" id="menuContainer">
-                <!-- O cardápio será carregado dinamicamente via JS -->
                 <div class="menu-category" data-cat="entradas">
                     <h3>ENTRADAS</h3>
                     <div class="category-divider">
@@ -273,7 +343,7 @@
             
             <div class="menu-footer">
                 <p>* Cardápios personalizados disponíveis sob consulta.</p>
-                <a href="#contato" class="btn btn-menu-budget" id="closeMenuToContact">FAÇA SEU ORÇAMENTO</a>
+                <a href="main.html#contato" class="btn btn-menu-budget" id="closeMenuToContact">FAÇA SEU ORÇAMENTO</a>
             </div>
             <div class="menu-scroll-indicator">
                 <div class="menu-scroll-line"></div>
@@ -282,155 +352,17 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content container">
-            <div class="hero-badge">✦ Bangu · Rio de Janeiro ✦</div>
-            <h1 class="hero-title">
-                O Melhor <em>Buffet</em><br>de Bangu
-            </h1>
-            <div class="hero-divider"></div>
-            <p>Sabor e experiências gastronômicas inesquecíveis para o seu evento na Zona Oeste do Rio.</p>
-            <div class="hero-btns">
-                <a href="#contato" class="btn hero-btn-primary">FAÇA SEU ORÇAMENTO</a>
-                <a href="galeria.html" class="btn btn-outline hero-btn-outline hero-btn-gallery-mobile">
-                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
-                    </svg>
-                    GALERIA
-                </a>
-                <a href="javascript:void(0)" class="btn btn-outline hero-btn-outline" id="openMenuHero">
-                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16M4 18h7"/>
-                    </svg>
-                    CARDÁPIO
-                </a>
+    <!-- Lightbox Modal da Galeria -->
+    <div id="galleryLightbox" class="gallery-lightbox">
+        <span class="close-lightbox" id="closeLightbox">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="" alt="Imagem Ampliada">
+            <div class="lightbox-caption">
+                <h3 id="lightboxTitle"></h3>
+                <p id="lightboxDesc"></p>
             </div>
         </div>
-        <div class="hero-scroll-indicator">
-            <div class="hero-scroll-line"></div>
-            <span>Role</span>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main>
-        <!-- Sobre Nós -->
-        <section id="sobre" class="container">
-            <div class="about-grid">
-                <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80" alt="Gastronomia Fina em Bangu">
-                    <div class="about-image-badge">
-                        <svg class="badge-star-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        Alta Gastronomia
-                    </div>
-                </div>
-                <div class="about-content">
-                    <div class="section-header-decorative section-header-left">
-                        <div class="ornament ornament-top-sobre">
-                            <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M100 5C120 5 140 15 160 25M100 5C80 5 60 15 40 25M100 10C115 10 130 18 145 25M100 10C85 10 70 18 55 25" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-                                <circle cx="100" cy="5" r="2" fill="#d4af37"/>
-                                <path d="M90 15C95 12 105 12 110 15" stroke="#d4af37" stroke-width="1" fill="none"/>
-                            </svg>
-                        </div>
-                        <h2 class="section-title-sobre">BUFFET EM BANGU</h2>
-                        <div class="ornament ornament-bottom-sobre">
-                            <svg viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M40 5C60 15 80 25 100 25C120 25 140 15 160 5" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-                                <circle cx="100" cy="25" r="2" fill="#d4af37"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <p>Com mais de uma década dedicada à alta gastronomia, o <strong>Seleto Buffet</strong> é referência quando se busca um <strong>buffet em Bangu</strong> que une sofisticação e sabor.</p>
-                    <p>Localizado no coração de Bangu, nossa missão é transformar cada celebração em um marco inesquecível. Acreditamos que cada detalhe importa, desde a escolha dos ingredientes até o atendimento impecável da nossa equipe.</p>
-                    <p>Seja para um casamento clássico, uma festa vibrante ou um evento corporativo, somos a escolha ideal para quem busca excelência na Zona Oeste do Rio de Janeiro.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Serviços -->
-        <section id="servicos" class="serv">
-            <div class="section-header-decorative">
-                <div class="ornament ornament-top-serv">
-                    <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 5C120 5 140 15 160 25M100 5C80 5 60 15 40 25M100 10C115 10 130 18 145 25M100 10C85 10 70 18 55 25" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="100" cy="5" r="2" fill="#d4af37"/>
-                        <path d="M90 15C95 12 105 12 110 15" stroke="#d4af37" stroke-width="1" fill="none"/>
-                    </svg>
-                </div>
-                <h2 class="section-title-sobre">NOSSOS SERVIÇOS</h2>
-                <div class="ornament ornament-bottom-serv">
-                    <svg viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M40 5C60 15 80 25 100 25C120 25 140 15 160 5" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="100" cy="25" r="2" fill="#d4af37"/>
-                    </svg>
-                </div>
-            </div>
-            <div class="container-serv">
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 10c2 0 5-1 5-4s-3-4-5-4-5 1-5 4 3 4 5 4Z"/>
-                                <path d="M12 10c-2 0-5 1-5 4s3 4 5 4 5-1 5-4-3-4-5-4Z"/>
-                                <path d="M12 22v-4"/>
-                                <path d="M12 18c-4 0-8-2-8-5 0-2 2-3 4-3"/>
-                                <path d="M12 18c4 0 8-2 8-5 0-2-2-3-4-3"/>
-                            </svg>
-                        </div>
-                        <h3>Casamentos</h3>
-                        <p>Onde o "sim" encontra o banquete dos sonhos com elegância atemporal.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="7" width="20" height="14" rx="2" />
-                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                            </svg>
-                        </div>
-                        <h3>Corporativo</h3>
-                        <p>Excelência e profissionalismo traduzidos em sabores que impressionam parceiros e clientes.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/>
-                                <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/>
-                                <path d="M2 21h20"/>
-                                <path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/>
-                                <path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/>
-                            </svg>
-                        </div>
-                        <h3>Festas</h3>
-                        <p>Celebrações vibrantes com cardápios criativos que encantam todas as gerações.</p>
-                    </div>
-                </div>
-                <div class="services-action">
-                    <a href="javascript:void(0)" class="btn btn-outline btn-services" id="openMenu">VEJA NOSSO CARDÁPIO</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contato -->
-        <section id="contato" class="container">
-            <div class="contact-new-card">
-                <h2>Pronto para planejar sua próxima experiência?</h2>
-                <p>Nossa equipe está à disposição para criar um orçamento personalizado que atenda perfeitamente às suas expectativas e necessidades.</p>
-                
-                <a href="https://wa.me/5521976714721" target="_blank" class="btn-solicitar" rel="noopener noreferrer">SOLICITAR ORÇAMENTO</a>
-
-                <div class="whatsapp-contact">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                    </svg>
-                    <span>Fale conosco pelo WhatsApp</span>
-                </div>
-            </div>
-        </section>
-    </main>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -442,7 +374,6 @@
 
     </div><!-- /#page-wrapper -->
 
-    <!-- JavaScript Application Script -->
     <script src="script.js" defer></script>
 </body>
 </html>
