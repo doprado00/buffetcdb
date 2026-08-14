@@ -56,6 +56,13 @@ function updateUIForOwner() {
             ownerControls.classList.remove('display-none'); // ← REMOVE a classe que esconde
             ownerControls.style.display = 'flex';           // ← Força a exibição
         }
+
+        // 1b. MOSTRAR painel admin da galeria (se estiver na página da galeria)
+        const galleryAdminPanel = document.getElementById('galleryAdminPanel');
+        if (galleryAdminPanel) {
+            galleryAdminPanel.classList.remove('display-none');
+            galleryAdminPanel.style.display = 'block';
+        }
         
         // 2. Atualizar botão do header
         if (openLogin) {
@@ -80,6 +87,13 @@ function updateUIForOwner() {
         if (ownerControls) {
             ownerControls.classList.add('display-none');    // ← ADICIONA a classe que esconde
             ownerControls.style.display = 'none';           // ← Força a ocultação
+        }
+
+        // 1b. ESCONDER painel admin da galeria
+        const galleryAdminPanel = document.getElementById('galleryAdminPanel');
+        if (galleryAdminPanel) {
+            galleryAdminPanel.classList.add('display-none');
+            galleryAdminPanel.style.display = 'none';
         }
         
         // 2. Atualizar botão do header
@@ -495,6 +509,8 @@ const panelGalleryBtn = document.getElementById('panelGalleryBtn');
 if (panelGalleryBtn) {
     panelGalleryBtn.onclick = function (e) {
         e.preventDefault();
+        if (loginModal) loginModal.style.display = 'none';
+        unlockScroll();
         window.location.href = 'galeria.html';
     };
 }
@@ -599,57 +615,289 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================
-   Gallery Interactive Logic (Filters & Lightbox)
+   Gallery Interactive Logic (Filters, Lightbox & Admin)
    ========================================== */
 
-function setupGallery() {
+let galleryCurrentFilter = 'all';
+let galleryAllPhotos = [];
+
+const CATEGORY_LABELS = {
+    pratos: 'Gastronomia',
+    eventos: 'Eventos',
+    decoracao: 'Decoração'
+};
+
+async function loadGallery() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) return;
+
+    try {
+        const response = await fetch(`${API_URL}/api/galeria`);
+        const fotos = await response.json();
+
+        galleryAllPhotos = Array.isArray(fotos) ? fotos : [];
+        renderGallery(galleryAllPhotos);
+    } catch (error) {
+        console.error('Erro ao carregar galeria:', error);
+        const loadingMsg = document.getElementById('galleryLoadingMsg');
+        if (loadingMsg) {
+            loadingMsg.innerHTML = '<div class="gallery-empty-icon">⚠️</div><p>Erro ao carregar a galeria.</p>';
+        }
+    }
+}
+
+function renderGallery(fotos) {
+    const galleryGrid = document.getElementById('galleryGrid');
     const filterBtns = document.querySelectorAll('.gallery-filter-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
+    if (!galleryGrid) return;
+
+    // Filter photos by current active filter
+    const filtered = galleryCurrentFilter === 'all'
+        ? fotos
+        : fotos.filter(f => f.categoria === galleryCurrentFilter);
+
+    galleryGrid.innerHTML = '';
+
+    if (filtered.length === 0) {
+        galleryGrid.innerHTML = `
+            <div class="gallery-empty-msg">
+                <div class="gallery-empty-icon">🖼️</div>
+                <p>${fotos.length === 0 ? 'Nenhuma foto adicionada à galeria ainda.' : 'Nenhuma foto nesta categoria.'}</p>
+            </div>
+        `;
+        return;
+    }
+
     const lightbox = document.getElementById('galleryLightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxTitle = document.getElementById('lightboxTitle');
     const lightboxDesc = document.getElementById('lightboxDesc');
+
+    filtered.forEach(foto => {
+        const imgUrl = `${API_URL}/imagens/galeria/${foto.filename}`;
+        const label = CATEGORY_LABELS[foto.categoria] || foto.categoria;
+
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.setAttribute('data-category', foto.categoria);
+        item.setAttribute('data-id', foto.id);
+
+        item.innerHTML = `
+            <img src="${imgUrl}" alt="${foto.titulo}" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-info">
+                    <span class="gallery-tag">${label}</span>
+                    <h3>${foto.titulo}</h3>
+                </div>
+                <span class="gallery-zoom-icon">🔍</span>
+            </div>
+            ${isOwner ? `<button class="gallery-delete-btn" data-id="${foto.id}" title="Excluir foto">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14H6L5 6"/>
+                    <path d="M10 11v6M14 11v6"/>
+                    <path d="M9 6V4h6v2"/>
+                </svg>
+            </button>` : ''}
+        `;
+
+        // Lightbox click (only on non-delete areas)
+        item.addEventListener('click', (e) => {
+            if (e.target.closest('.gallery-delete-btn')) return;
+            if (lightbox && lightboxImg) {
+                lightboxImg.src = imgUrl;
+                if (lightboxTitle) lightboxTitle.textContent = foto.titulo || '';
+                if (lightboxDesc) lightboxDesc.textContent = foto.descricao || '';
+                lightbox.classList.add('active');
+            }
+        });
+
+        // Delete button
+        if (isOwner) {
+            const deleteBtn = item.querySelector('.gallery-delete-btn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    if (!confirm(`Tem certeza que deseja excluir a foto "${foto.titulo}"?`)) return;
+
+                    try {
+                        const token = localStorage.getItem('ownerToken');
+                        const res = await fetch(`${API_URL}/api/galeria/${foto.id}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': token }
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            showGalleryFeedback('Foto excluída com sucesso!', false);
+                            await loadGallery();
+                        } else {
+                            showGalleryFeedback('Erro ao excluir: ' + data.message, true);
+                        }
+                    } catch (err) {
+                        showGalleryFeedback('Erro de conexão ao excluir.', true);
+                    }
+                });
+            }
+        }
+
+        galleryGrid.appendChild(item);
+    });
+
+    // Re-attach lightbox close button
+    const closeLightbox = document.getElementById('closeLightbox');
+    if (closeLightbox && lightbox) {
+        closeLightbox.onclick = () => lightbox.classList.remove('active');
+    }
+}
+
+function showGalleryFeedback(message, isError = false) {
+    const fb = document.getElementById('galleryUploadFeedback');
+    if (!fb) return;
+    fb.textContent = message;
+    fb.className = `gallery-upload-feedback ${isError ? 'error' : 'success'}`;
+    fb.classList.remove('display-none');
+    fb.style.display = 'block';
+    setTimeout(() => {
+        fb.style.display = 'none';
+        fb.classList.add('display-none');
+    }, 5000);
+}
+
+function setupGallery() {
+    const filterBtns = document.querySelectorAll('.gallery-filter-btn');
+    const lightbox = document.getElementById('galleryLightbox');
     const closeLightbox = document.getElementById('closeLightbox');
 
-    // 1. Filtragem dinâmica das categorias
+    // 1. Filtros
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            const filter = btn.getAttribute('data-filter');
-
-            galleryItems.forEach(item => {
-                const category = item.getAttribute('data-category');
-                if (filter === 'all' || category === filter) {
-                    item.style.display = 'block';
-                    item.style.animation = 'fadeIn 0.4s ease forwards';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+            galleryCurrentFilter = btn.getAttribute('data-filter');
+            renderGallery(galleryAllPhotos);
         });
     });
 
-    // 2. Lightbox dinâmico para zoom na imagem
-    galleryItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const img = item.querySelector('img');
-            const title = item.getAttribute('data-title');
-            const desc = item.getAttribute('data-desc');
+    // 2. Lightbox close
+    if (closeLightbox && lightbox) {
+        closeLightbox.addEventListener('click', () => lightbox.classList.remove('active'));
+    }
 
-            if (lightbox && lightboxImg && img) {
-                lightboxImg.src = img.src;
-                if (lightboxTitle) lightboxTitle.textContent = title || '';
-                if (lightboxDesc) lightboxDesc.textContent = desc || '';
-                lightbox.classList.add('active');
+    // 3. Upload form
+    const uploadForm = document.getElementById('galleryUploadForm');
+    const fotoFile = document.getElementById('fotoFile');
+    const filePreviewContainer = document.getElementById('filePreviewContainer');
+    const filePreviewImg = document.getElementById('filePreviewImg');
+    const fileDropText = document.getElementById('fileDropText');
+    const clearFileBtn = document.getElementById('clearFileBtn');
+    const dropZone = document.getElementById('dropZone');
+
+    if (fotoFile) {
+        fotoFile.addEventListener('change', () => {
+            const file = fotoFile.files[0];
+            if (file) showFilePreview(file);
+        });
+    }
+
+    if (clearFileBtn) {
+        clearFileBtn.addEventListener('click', () => {
+            if (fotoFile) fotoFile.value = '';
+            if (filePreviewContainer) {
+                filePreviewContainer.classList.add('display-none');
+                filePreviewContainer.style.display = 'none';
+            }
+            if (fileDropText) fileDropText.textContent = 'Clique para selecionar ou arraste uma foto aqui';
+        });
+    }
+
+    // Drag & Drop
+    if (dropZone) {
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file && fotoFile) {
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                fotoFile.files = dt.files;
+                showFilePreview(file);
             }
         });
-    });
+    }
 
-    if (closeLightbox && lightbox) {
-        closeLightbox.addEventListener('click', () => {
-            lightbox.classList.remove('active');
+    function showFilePreview(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (filePreviewImg) filePreviewImg.src = e.target.result;
+            if (filePreviewContainer) {
+                filePreviewContainer.classList.remove('display-none');
+                filePreviewContainer.style.display = 'flex';
+            }
+            if (fileDropText) fileDropText.textContent = file.name;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const titulo = document.getElementById('fotoTitulo')?.value.trim();
+            const descricao = document.getElementById('fotoDescricao')?.value.trim();
+            const categoria = document.getElementById('fotoCategoria')?.value;
+            const file = fotoFile?.files[0];
+
+            if (!titulo) { showGalleryFeedback('Preencha o título da foto.', true); return; }
+            if (!file) { showGalleryFeedback('Selecione uma foto para enviar.', true); return; }
+
+            const formData = new FormData();
+            formData.append('foto', file);
+            formData.append('titulo', titulo);
+            formData.append('descricao', descricao || '');
+            formData.append('categoria', categoria);
+
+            const uploadBtn = document.getElementById('galleryUploadBtn');
+            if (uploadBtn) {
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = 'ENVIANDO...';
+            }
+
+            try {
+                const token = localStorage.getItem('ownerToken');
+                const res = await fetch(`${API_URL}/api/galeria/upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': token },
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    showGalleryFeedback('✅ Foto adicionada com sucesso!', false);
+                    uploadForm.reset();
+                    if (fotoFile) fotoFile.value = '';
+                    if (filePreviewContainer) {
+                        filePreviewContainer.classList.add('display-none');
+                        filePreviewContainer.style.display = 'none';
+                    }
+                    if (fileDropText) fileDropText.textContent = 'Clique para selecionar ou arraste uma foto aqui';
+                    galleryCurrentFilter = 'all';
+                    document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
+                    const allBtn = document.querySelector('.gallery-filter-btn[data-filter="all"]');
+                    if (allBtn) allBtn.classList.add('active');
+                    await loadGallery();
+                } else {
+                    showGalleryFeedback('Erro: ' + data.message, true);
+                }
+            } catch (err) {
+                showGalleryFeedback('Erro de conexão. Tente novamente.', true);
+            } finally {
+                if (uploadBtn) {
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> ADICIONAR FOTO À GALERIA`;
+                }
+            }
         });
     }
 }
@@ -660,3 +908,4 @@ function setupGallery() {
 
 updateUIForOwner();
 loadMenu();
+loadGallery();

@@ -86,72 +86,60 @@
             <button class="gallery-filter-btn" data-filter="decoracao">Decoração</button>
         </div>
 
-        <!-- Grid de Fotos -->
-        <div class="gallery-grid">
-            <div class="gallery-item" data-category="pratos" data-title="Canapés Finos de Salmão" data-desc="Apresentação sofisticada para recepção de convidados">
-                <img src="imagens/cardapio.png" alt="Canapés Finos">
-                <div class="gallery-overlay">
-                    <div class="gallery-info">
-                        <span class="gallery-tag">Gastronomia</span>
-                        <h3>Canapés Finos de Salmão</h3>
-                    </div>
-                    <span class="gallery-zoom-icon">🔍</span>
-                </div>
+        <!-- Painel Admin da Galeria (só visível para proprietários) -->
+        <div id="galleryAdminPanel" class="gallery-admin-panel display-none">
+            <div class="gallery-admin-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                <span>Gerenciar Galeria de Fotos</span>
             </div>
-
-            <div class="gallery-item" data-category="eventos" data-title="Buffet para Casamentos" data-desc="Banquete completo com serviço de alta gastronomia">
-                <img src="imagens/sobre.png" alt="Evento de Casamento">
-                <div class="gallery-overlay">
-                    <div class="gallery-info">
-                        <span class="gallery-tag">Eventos</span>
-                        <h3>Mesa Principal de Casamento</h3>
+            <form id="galleryUploadForm" class="gallery-upload-form" enctype="multipart/form-data">
+                <div class="gallery-upload-row">
+                    <div class="gallery-upload-field">
+                        <label for="fotoTitulo">Título da Foto *</label>
+                        <input type="text" id="fotoTitulo" placeholder="Ex: Decoração de Casamento" required>
                     </div>
-                    <span class="gallery-zoom-icon">🔍</span>
-                </div>
-            </div>
-
-            <div class="gallery-item" data-category="decoracao" data-title="Ambientação Clássica" data-desc="Detalhamento elegante com iluminação cênica e flores">
-                <img src="imagens/serviços.png" alt="Ambientação e Decoração">
-                <div class="gallery-overlay">
-                    <div class="gallery-info">
-                        <span class="gallery-tag">Decoração</span>
-                        <h3>Ambientação Clássica</h3>
+                    <div class="gallery-upload-field">
+                        <label for="fotoCategoria">Categoria *</label>
+                        <select id="fotoCategoria">
+                            <option value="eventos">Eventos</option>
+                            <option value="pratos">Gastronomia</option>
+                            <option value="decoracao">Decoração</option>
+                        </select>
                     </div>
-                    <span class="gallery-zoom-icon">🔍</span>
                 </div>
-            </div>
-
-            <div class="gallery-item" data-category="pratos" data-title="Pratos Principais Exclusivos" data-desc="Filé Mignon ao molho especial e acompanhamentos">
-                <img src="imagens/{C45C280B-FEAB-4109-89C3-01CAD57211D2}.png" alt="Pratos Principais">
-                <div class="gallery-overlay">
-                    <div class="gallery-info">
-                        <span class="gallery-tag">Gastronomia</span>
-                        <h3>Pratos Principais Exclusivos</h3>
+                <div class="gallery-upload-field">
+                    <label for="fotoDescricao">Descrição</label>
+                    <input type="text" id="fotoDescricao" placeholder="Descrição opcional da foto">
+                </div>
+                <div class="gallery-upload-file-area" id="dropZone">
+                    <input type="file" id="fotoFile" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp" hidden>
+                    <label for="fotoFile" class="file-drop-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 16M14 8h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/>
+                        </svg>
+                        <span id="fileDropText">Clique para selecionar ou arraste uma foto aqui</span>
+                        <small>PNG, JPG, JPEG, GIF ou WebP &mdash; máx. 16MB</small>
+                    </label>
+                    <div id="filePreviewContainer" class="file-preview-container display-none">
+                        <img id="filePreviewImg" src="" alt="Preview">
+                        <button type="button" id="clearFileBtn" class="clear-file-btn" title="Remover foto">&times;</button>
                     </div>
-                    <span class="gallery-zoom-icon">🔍</span>
                 </div>
-            </div>
+                <div id="galleryUploadFeedback" class="gallery-upload-feedback display-none"></div>
+                <button type="submit" id="galleryUploadBtn" class="btn-admin btn-gallery-upload">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    ADICIONAR FOTO À GALERIA
+                </button>
+            </form>
+        </div>
 
-            <div class="gallery-item" data-category="eventos" data-title="Recepção Corporativa" data-desc="Atendimento ágil e pratos selecionados para eventos empresariais">
-                <img src="imagens/contato.png" alt="Recepção Corporativa">
-                <div class="gallery-overlay">
-                    <div class="gallery-info">
-                        <span class="gallery-tag">Eventos</span>
-                        <h3>Recepção Corporativa</h3>
-                    </div>
-                    <span class="gallery-zoom-icon">🔍</span>
-                </div>
-            </div>
-
-            <div class="gallery-item" data-category="decoracao" data-title="Mesa de Sobremesas Artesanais" data-desc="Seleção de doces e sobremesas em alta apresentação">
-                <img src="imagens/cardapio.png" alt="Mesa de Sobremesas">
-                <div class="gallery-overlay">
-                    <div class="gallery-info">
-                        <span class="gallery-tag">Decoração</span>
-                        <h3>Mesa de Sobremesas</h3>
-                    </div>
-                    <span class="gallery-zoom-icon">🔍</span>
-                </div>
+        <!-- Grid de Fotos (preenchido via JS) -->
+        <div class="gallery-grid" id="galleryGrid">
+            <div id="galleryLoadingMsg" class="gallery-empty-msg">
+                <div class="gallery-empty-icon">📷</div>
+                <p>Carregando galeria...</p>
             </div>
         </div>
     </main>

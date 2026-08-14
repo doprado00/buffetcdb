@@ -1,14 +1,27 @@
 import os
 import jwt
 import datetime
+import uuid
 import mysql.connector
 from mysql.connector import Error
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, send_from_directory
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 from flask_cors import CORS
 
 # Application Initialization
 app = Flask(__name__)
+
+# Upload configuration
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+GALERIA_UPLOAD_FOLDER = os.path.join(BASE_DIR, 'imagens', 'galeria')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+os.makedirs(GALERIA_UPLOAD_FOLDER, exist_ok=True)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Load secret key from environment or fallback default
 app.secret_key = os.getenv('SECRET_KEY', 'buffet_elegance_secret_123')
@@ -65,6 +78,18 @@ def init_db():
                 categoria VARCHAR(100) NOT NULL,
                 nome VARCHAR(255) NOT NULL,
                 descricao TEXT
+            )
+        """)
+
+        # Tabela da galeria de fotos
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS galeria_fotos (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                titulo VARCHAR(255) NOT NULL,
+                descricao TEXT,
+                categoria VARCHAR(100) NOT NULL DEFAULT 'eventos',
+                filename VARCHAR(255) NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
@@ -225,6 +250,138 @@ def update_menu():
         return jsonify({"success": True, "message": "Cardápio atualizado!"}), 200
     except Exception as e:
         print(f"Erro ao atualizar menu: {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+# ==========================================
+# Gallery API Routes
+# ==========================================
+
+@app.route('/imagens/galeria/<path:filename>')
+def serve_galeria_image(filename):
+    """
+    Serves gallery images from the imagens/galeria/ folder.
+    """
+    return send_from_directory(GALERIA_UPLOAD_FOLDER, filename)
+
+
+@app.route('/api/galeria', methods=['GET'])
+def get_galeria():
+    """
+    Retrieves all gallery photos ordered by creation date (newest first).
+    """
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM galeria_fotos ORDER BY created_at DESC")
+        fotos = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        # Convert datetime to string for JSON serialization
+        for foto in fotos:
+            if foto.get('created_at'):
+                foto['created_at'] = foto['created_at'].isoformat()
+        return jsonify(fotos), 200
+    except Exception as e:
+        print(f"Erro ao carregar galeria: {e}")
+        return jsonify({"error": "Erro ao carregar galeria"}), 500
+
+
+@app.route('/api/galeria/upload', methods=['POST'])
+def upload_galeria():
+    """
+    Uploads a new photo to the gallery. Requires a valid JWT token.
+    Expects multipart/form-data with 'foto', 'titulo', 'descricao', 'categoria' fields.
+    """
+    auth_token = request.headers.get('Authorization')
+    if not auth_token or not verify_token(auth_token):
+        return jsonify({"success": False, "message": "Não autorizado"}), 403
+
+    if 'foto' not in request.files:
+        return jsonify({"success": False, "message": "Nenhuma foto enviada"}), 400
+
+    file = request.files['foto']
+    titulo = request.form.get('titulo', '').strip()
+    descricao = request.form.get('descricao', '').strip()
+    categoria = request.form.get('categoria', 'eventos').strip()
+
+    if not titulo:
+        return jsonify({"success": False, "message": "Título é obrigatório"}), 400
+
+    if file.filename == '':
+        return jsonify({"success": False, "message": "Nenhum arquivo selecionado"}), 400
+
+    if not allowed_file(file.filename):
+        return jsonify({"success": False, "message": "Formato de arquivo não suportado. Use PNG, JPG, JPEG, GIF ou WebP."}), 400
+
+    try:
+        # Generate a unique filename to avoid conflicts
+        ext = file.filename.rsplit('.', 1)[1].lower()
+        unique_filename = f"{uuid.uuid4().hex}.{ext}"
+        filepath = os.path.join(GALERIA_UPLOAD_FOLDER, unique_filename)
+        file.save(filepath)
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "INSERT INTO galeria_fotos (titulo, descricao, categoria, filename) VALUES (%s, %s, %s, %s)",
+            (titulo, descricao, categoria, unique_filename)
+        )
+        conn.commit()
+        new_id = cursor.lastrowid
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            "success": True,
+            "message": "Foto adicionada com sucesso!",
+            "foto": {
+                "id": new_id,
+                "titulo": titulo,
+                "descricao": descricao,
+                "categoria": categoria,
+                "filename": unique_filename
+            }
+        }), 201
+    except Exception as e:
+        print(f"Erro ao fazer upload: {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@app.route('/api/galeria/<int:foto_id>', methods=['DELETE'])
+def delete_galeria(foto_id):
+    """
+    Deletes a gallery photo by ID. Requires a valid JWT token.
+    Also removes the physical file from disk.
+    """
+    auth_token = request.headers.get('Authorization')
+    if not auth_token or not verify_token(auth_token):
+        return jsonify({"success": False, "message": "Não autorizado"}), 403
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT filename FROM galeria_fotos WHERE id = %s", (foto_id,))
+        foto = cursor.fetchone()
+
+        if not foto:
+            cursor.close()
+            conn.close()
+            return jsonify({"success": False, "message": "Foto não encontrada"}), 404
+
+        # Remove physical file
+        filepath = os.path.join(GALERIA_UPLOAD_FOLDER, foto['filename'])
+        if os.path.exists(filepath):
+            os.remove(filepath)
+
+        cursor.execute("DELETE FROM galeria_fotos WHERE id = %s", (foto_id,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({"success": True, "message": "Foto excluída com sucesso!"}), 200
+    except Exception as e:
+        print(f"Erro ao excluir foto: {e}")
         return jsonify({"success": False, "message": str(e)}), 500
 
 
