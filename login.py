@@ -4,6 +4,9 @@ import datetime
 import uuid
 import mysql.connector
 from mysql.connector import Error
+from dotenv import load_dotenv
+
+load_dotenv()
 from flask import Flask, request, jsonify, session, send_from_directory
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -23,8 +26,12 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Load secret key from environment or fallback default
-app.secret_key = os.getenv('SECRET_KEY', 'buffet_elegance_secret_123')
+# Load secret key from environment — never falls back to a hardcoded value in production
+app.secret_key = os.getenv('SECRET_KEY')
+if not app.secret_key:
+    raise RuntimeError(
+        "SECRET_KEY não definida. Adicione SECRET_KEY ao seu arquivo .env antes de iniciar o servidor."
+    )
 
 # Enable CORS for frontend clients
 CORS(app, supports_credentials=True, origins=[
@@ -35,13 +42,20 @@ CORS(app, supports_credentials=True, origins=[
     "http://localhost:8000"
 ])
 
-# Configuração de Conexão com o MySQL 8.0
+# Configuração do banco de dados lida exclusivamente a partir do arquivo .env
 MYSQL_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',               # Substitua pelo seu usuário do MySQL se for diferente
-    'password': '#Gui078383',  # Substitua pela sua senha do MySQL
-    'database': 'buffet_elegance'
+    'host':     os.getenv('DB_HOST', '127.0.0.1'),
+    'user':     os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'database': os.getenv('DB_NAME'),
 }
+
+# Validação obrigatória: interrompe a inicialização se alguma variável crítica estiver ausente
+_missing_vars = [k for k, v in MYSQL_CONFIG.items() if v is None]
+if _missing_vars:
+    raise RuntimeError(
+        f"Variáveis de ambiente obrigatórias ausentes no .env: {', '.join(_missing_vars).upper()}"
+    )
 
 # ==========================================
 # Database Helpers & Initialization
@@ -273,14 +287,19 @@ def get_galeria():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM galeria_fotos ORDER BY created_at DESC")
+        # Suporta tanto 'created_at' quanto 'criado_em' como coluna de data
+        try:
+            cursor.execute("SELECT * FROM galeria_fotos ORDER BY created_at DESC")
+        except Exception:
+            cursor.execute("SELECT * FROM galeria_fotos ORDER BY criado_em DESC")
         fotos = cursor.fetchall()
         cursor.close()
         conn.close()
-        # Convert datetime to string for JSON serialization
+        # Convert ALL datetime fields to string for JSON serialization
         for foto in fotos:
-            if foto.get('created_at'):
-                foto['created_at'] = foto['created_at'].isoformat()
+            for key, val in foto.items():
+                if hasattr(val, 'isoformat'):
+                    foto[key] = val.isoformat()
         return jsonify(fotos), 200
     except Exception as e:
         print(f"Erro ao carregar galeria: {e}")
