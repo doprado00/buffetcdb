@@ -219,7 +219,7 @@ def get_menu():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM cardapio ORDER BY categoria, id")
+        cursor.execute("SELECT * FROM cardapio ORDER BY id")
         items = cursor.fetchall()
         cursor.close()
         conn.close()

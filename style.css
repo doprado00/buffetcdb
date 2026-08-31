@@ -1221,25 +1221,19 @@ section {
 
 @media (min-width: 768px) {
     .menu-categories {
-        grid-template-columns: 1fr 1fr;
+        display: block;
+        columns: 2;
         column-gap: 55px;
-        row-gap: 35px;
-        align-items: start;
     }
 
-    .menu-category[data-cat="entradas"] {
-        grid-column: 1;
-        grid-row: 1;
+    .menu-category {
+        break-inside: avoid;
+        margin-bottom: 35px;
     }
 
-    .menu-category[data-cat="sobremesas"] {
-        grid-column: 1;
-        grid-row: 2;
-    }
-
-    .menu-category[data-cat="principais"] {
-        grid-column: 2;
-        grid-row: 1 / span 2;
+    /* Botão "Novo Tópico" ocupa as 2 colunas no modo de edição */
+    .btn-add-topic {
+        column-span: all;
     }
 }
 
@@ -1347,6 +1341,130 @@ section {
     border: 1px solid #ffa39e;
     color: #cf1322;
 }
+
+/* ---- Botões de edição do cardápio ---- */
+
+/* Linha de input + botão remover item */
+.edit-item-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 5px;
+}
+
+.edit-item-row .edit-input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Botão ✕ ao lado de cada item */
+.btn-remove-item {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid #ffa39e;
+    color: #cf1322;
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-remove-item:hover {
+    background: #fff1f0;
+    color: #a8071a;
+}
+
+/* Botão "+ Adicionar Item" por categoria */
+.btn-add-item {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    background: none;
+    border: 1px dashed #b8860b;
+    border-radius: 6px;
+    color: #b8860b;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-add-item:hover {
+    background: #fdf7e3;
+    color: #8a6300;
+    border-color: #8a6300;
+}
+
+/* Botão "+ Novo Tópico" global */
+.btn-add-topic {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 11px 0;
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.15s;
+    grid-column: 1 / -1; /* span colunas no grid de categorias */
+}
+
+.btn-add-topic:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* Botão "✕ Remover tópico" junto ao h3 */
+.btn-remove-topic {
+    display: inline-block;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    padding: 4px 10px;
+    background: none;
+    border: 1px solid #ffa39e;
+    border-radius: 4px;
+    color: #cf1322;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-remove-topic:hover {
+    background: #fff1f0;
+    color: #a8071a;
+}
+
+/* Header de novo tópico: input + botão lado a lado */
+.new-topic-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.new-topic-header .topic-name-input {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    color: #98721c;
+    margin-bottom: 0;
+}
+
+.new-topic-header .btn-remove-topic {
+    margin: 0;
+}
+
 
 .menu-footer {
     margin-top: 35px;
@@ -3012,4 +3130,93 @@ input[type="password"]::-webkit-input-password-toggle {
 .gallery-empty-msg p {
     font-size: 1rem;
     color: rgba(26,26,26,0.55);
+}/* ---- Custom Confirm Modal ---- */
+.confirm-overlay {
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.confirm-modal-content {
+    background: #fbf7f0;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #ebdcb8;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.confirm-message {
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+.confirm-btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.confirm-btn-cancel, .confirm-btn-confirm {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+}
+
+.confirm-btn-cancel {
+    border-color: #ccc !important;
+    color: #555 !important;
+}
+
+.confirm-btn-confirm {
+    background: #cf1322 !important;
+    color: #fff !important;
+    border: none !important;
+}
+@media (max-width: 480px) {
+    .owner-controls {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+    .btn-admin {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+    }
+}
+
+/* Forcing visibility on mobile */
+@media (max-width: 768px) {
+    .btn-add-item, .btn-add-topic {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        z-index: 10;
+        position: relative;
+    }
+}
+
+@media (max-width: 768px) {
+    .owner-controls {
+        display: flex !important;
+    }
+    .owner-controls.display-none {
+        display: none !important;
+    }
+}
+
+/* Guarantee buttons display properly on mobile */
+@media (max-width: 480px) {
+    .btn-add-topic, .btn-add-item {
+        padding: 15px 0 !important;
+        font-size: 1rem !important;
+    }
 }

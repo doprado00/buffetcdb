@@ -44,6 +44,56 @@ let isOwner = !!localStorage.getItem('ownerToken');
    UI & Scroll Management
    ========================================== */
 
+function showCustomConfirm(message) {
+    return new Promise((resolve) => {
+        const overlay = document.createElement('div');
+        overlay.className = 'modal confirm-overlay active';
+        overlay.style.display = 'flex';
+        overlay.style.zIndex = '9999';
+
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content confirm-modal-content';
+
+        const text = document.createElement('p');
+        text.textContent = message;
+        text.className = 'confirm-message';
+
+        const btnRow = document.createElement('div');
+        btnRow.className = 'confirm-btn-row';
+
+        const btnCancel = document.createElement('button');
+        btnCancel.className = 'btn btn-outline confirm-btn-cancel';
+        btnCancel.textContent = 'CANCELAR';
+
+        const btnConfirm = document.createElement('button');
+        btnConfirm.className = 'btn confirm-btn-confirm';
+        btnConfirm.textContent = 'EXCLUIR';
+
+        btnRow.appendChild(btnCancel);
+        btnRow.appendChild(btnConfirm);
+        modalContent.appendChild(text);
+        modalContent.appendChild(btnRow);
+        overlay.appendChild(modalContent);
+        document.body.appendChild(overlay);
+
+        const cleanup = () => {
+            if (document.body.contains(overlay)) {
+                document.body.removeChild(overlay);
+            }
+        };
+
+        btnCancel.onclick = () => {
+            cleanup();
+            resolve(false);
+        };
+
+        btnConfirm.onclick = () => {
+            cleanup();
+            resolve(true);
+        };
+    });
+}
+
 function updateUIForOwner() {
     const loginView = document.getElementById('loginView');
     const ownerView = document.getElementById('ownerView');
@@ -281,29 +331,28 @@ function getDividerSvg(key) {
 function renderMenu(items) {
     if (!menuContainer) return;
 
-    const categories = {
-        'entradas': { title: 'Entradas', items: [] },
-        'principais': { title: 'Pratos Principais', items: [] },
-        'sobremesas': { title: 'Sobremesas', items: [] }
-    };
-
+    // Mapa ordenado: preserva a ordem de chegada das categorias do banco
+    const categoryMap = new Map();
     items.forEach(item => {
-        if (categories[item.categoria]) {
-            categories[item.categoria].items.push(item);
+        if (!categoryMap.has(item.categoria)) {
+            categoryMap.set(item.categoria, []);
         }
+        categoryMap.get(item.categoria).push(item);
     });
 
     menuContainer.innerHTML = '';
-    for (const key in categories) {
-        const cat = categories[key];
+    categoryMap.forEach((catItems, key) => {
+        // Capitaliza o nome: "pratos_principais" → "Pratos Principais"
+        const title = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
         const section = document.createElement('div');
         section.className = 'menu-category';
         section.setAttribute('data-cat', key);
         section.innerHTML = `
-            <h3>${cat.title.toUpperCase()}</h3>
+            <h3>${title.toUpperCase()}</h3>
             ${getDividerSvg(key)}
             <ul class="menu-list" data-category="${key}">
-                ${cat.items.map(item => `
+                ${catItems.map(item => `
                     <li>
                         <span class="item-name">${item.nome}</span>
                         <p class="item-desc">${item.descricao}</p>
@@ -312,7 +361,7 @@ function renderMenu(items) {
             </ul>
         `;
         menuContainer.appendChild(section);
-    }
+    });
 }
 
 function showMenuFeedback(message, isError = false) {
@@ -331,14 +380,14 @@ if (editMenuBtn) {
     editMenuBtn.onclick = () => {
         menuModal.classList.add('editing');
         editMenuBtn.style.display = 'none';
-        
-        // Mostra o botão SALVAR (remove a classe que esconde)
+
+        // Mostra o botão SALVAR
         if (saveMenuBtn) {
             saveMenuBtn.classList.remove('display-none');
             saveMenuBtn.style.display = 'inline-block';
         }
-        
-        // Mostra o botão CANCELAR (remove a classe que esconde)
+
+        // Mostra o botão CANCELAR
         if (cancelEditBtn) {
             cancelEditBtn.classList.remove('display-none');
             cancelEditBtn.style.display = 'inline-block';
@@ -350,11 +399,136 @@ if (editMenuBtn) {
             const name = li.querySelector('.item-name').textContent;
             const desc = li.querySelector('.item-desc').textContent;
             li.innerHTML = `
-                <input type="text" class="edit-input name-input" value="${name}">
-                <textarea class="edit-textarea desc-input">${desc}</textarea>
+                <div class="edit-item-row">
+                    <input type="text" class="edit-input name-input" placeholder="Nome do prato" value="${name}">
+                    <button type="button" class="btn-remove-item" title="Remover item">✕</button>
+                </div>
+                <textarea class="edit-textarea desc-input" placeholder="Descrição">${desc}</textarea>
             `;
+            li.querySelector('.btn-remove-item').addEventListener('click', () => li.remove());
         });
+
+        // Adiciona botão "+ Adicionar Item" em cada categoria existente
+        menuContainer.querySelectorAll('.menu-category').forEach(catDiv => {
+            const catKey = catDiv.getAttribute('data-cat');
+            const list = catDiv.querySelector('.menu-list');
+            if (!list) return;
+
+            // Botão de remover a categoria inteira
+            const catHeader = catDiv.querySelector('h3');
+            if (catHeader && !catDiv.querySelector('.btn-remove-topic')) {
+                const removeTopicBtn = document.createElement('button');
+                removeTopicBtn.type = 'button';
+                removeTopicBtn.className = 'btn-remove-topic';
+                removeTopicBtn.title = 'Remover tópico';
+                removeTopicBtn.textContent = '✕ Remover tópico';
+                removeTopicBtn.addEventListener('click', async () => {
+                    if (await showCustomConfirm(`Remover o tópico "${catHeader.textContent}" e todos os seus itens?`)) {
+                        catDiv.remove();
+                    }
+                });
+                catHeader.insertAdjacentElement('afterend', removeTopicBtn);
+            }
+
+            if (!catDiv.querySelector('.btn-add-item')) {
+                const addItemBtn = document.createElement('button');
+                addItemBtn.type = 'button';
+                addItemBtn.className = 'btn-add-item';
+                addItemBtn.textContent = '+ Adicionar Item';
+                addItemBtn.addEventListener('click', () => addNewItem(list, catKey));
+                catDiv.appendChild(addItemBtn);
+            }
+        });
+
+        // Botão global "+ Novo Tópico"
+        if (!menuContainer.querySelector('.btn-add-topic')) {
+            const addTopicBtn = document.createElement('button');
+            addTopicBtn.type = 'button';
+            addTopicBtn.className = 'btn-add-topic';
+            addTopicBtn.textContent = '+ Novo Tópico';
+            addTopicBtn.addEventListener('click', addNewTopic);
+            menuContainer.appendChild(addTopicBtn);
+        }
     };
+}
+
+/**
+ * Insere um novo <li> em branco em uma lista de categoria.
+ */
+function addNewItem(list, catKey) {
+    const li = document.createElement('li');
+    li.innerHTML = `
+        <div class="edit-item-row">
+            <input type="text" class="edit-input name-input" placeholder="Nome do prato">
+            <button type="button" class="btn-remove-item" title="Remover item">✕</button>
+        </div>
+        <textarea class="edit-textarea desc-input" placeholder="Descrição"></textarea>
+    `;
+    li.querySelector('.btn-remove-item').addEventListener('click', () => li.remove());
+    list.appendChild(li);
+    li.querySelector('.name-input').focus();
+}
+
+/**
+ * Cria um novo bloco de tópico/categoria com nome editável.
+ */
+function addNewTopic() {
+    // Remove o botão "+ Novo Tópico" temporariamente (será re-adicionado ao final)
+    const existingTopicBtn = menuContainer.querySelector('.btn-add-topic');
+    if (existingTopicBtn) existingTopicBtn.remove();
+
+    // Gera uma chave única para a categoria (usada como data-category)
+    const catKey = 'topico_' + Date.now();
+
+    const catDiv = document.createElement('div');
+    catDiv.className = 'menu-category';
+    catDiv.setAttribute('data-cat', catKey);
+    catDiv.innerHTML = `
+        <div class="new-topic-header">
+            <input type="text" class="edit-input topic-name-input" placeholder="Nome do tópico (ex: Bebidas)">
+            <button type="button" class="btn-remove-topic" title="Remover tópico">✕ Remover tópico</button>
+        </div>
+        <div class="category-divider">
+            <svg viewBox="0 0 200 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="0" y1="5" x2="200" y2="5" stroke="#b8860b" stroke-width="1" opacity="0.6"/>
+            </svg>
+        </div>
+        <ul class="menu-list" data-category="${catKey}"></ul>
+    `;
+
+    // Sincroniza o input do nome do tópico com o data-category em tempo real
+    const topicNameInput = catDiv.querySelector('.topic-name-input');
+    topicNameInput.addEventListener('input', () => {
+        const slug = topicNameInput.value.trim().toLowerCase().replace(/\s+/g, '_') || catKey;
+        catDiv.setAttribute('data-cat', slug);
+        catDiv.querySelector('.menu-list').setAttribute('data-category', slug);
+    });
+
+    // Botão de remover o tópico
+    catDiv.querySelector('.btn-remove-topic').addEventListener('click', async () => {
+        if (await showCustomConfirm('Remover este tópico e todos os seus itens?')) catDiv.remove();
+    });
+
+    menuContainer.appendChild(catDiv);
+
+    // Adiciona botão "+" ao novo tópico
+    const list = catDiv.querySelector('.menu-list');
+    const addItemBtn = document.createElement('button');
+    addItemBtn.type = 'button';
+    addItemBtn.className = 'btn-add-item';
+    addItemBtn.textContent = '+ Adicionar Item';
+    addItemBtn.addEventListener('click', () => addNewItem(list, catDiv.getAttribute('data-cat')));
+    catDiv.appendChild(addItemBtn);
+
+    // Re-adiciona o botão global "+ Novo Tópico" ao final
+    const newTopicBtn = document.createElement('button');
+    newTopicBtn.type = 'button';
+    newTopicBtn.className = 'btn-add-topic';
+    newTopicBtn.textContent = '+ Novo Tópico';
+    newTopicBtn.addEventListener('click', addNewTopic);
+    menuContainer.appendChild(newTopicBtn);
+
+    topicNameInput.focus();
 }
 
 if (cancelEditBtn) {
@@ -384,20 +558,41 @@ if (saveMenuBtn) {
         const categories = menuContainer.querySelectorAll('.menu-list');
 
         categories.forEach(catList => {
-            const category = catList.dataset.category;
+            // Para tópicos novos, o nome vem do input; para existentes, vem do data-category
+            const catDiv = catList.closest('.menu-category');
+            const topicNameInput = catDiv ? catDiv.querySelector('.topic-name-input') : null;
+            const categorySlug = topicNameInput
+                ? (topicNameInput.value.trim().toLowerCase().replace(/\s+/g, '_') || catList.dataset.category)
+                : catList.dataset.category;
+
             const items = catList.querySelectorAll('li');
             items.forEach(li => {
                 const nameInput = li.querySelector('.name-input');
                 const descInput = li.querySelector('.desc-input');
-                if (nameInput && descInput) {
+                if (nameInput && descInput && nameInput.value.trim()) {
                     updatedItems.push({
-                        categoria: category,
-                        nome: nameInput.value,
-                        descricao: descInput.value
+                        categoria: categorySlug,
+                        nome: nameInput.value.trim(),
+                        descricao: descInput.value.trim()
                     });
                 }
             });
         });
+
+        // Valida que há pelo menos um item para salvar
+        if (updatedItems.length === 0) {
+            showMenuFeedback('Adicione pelo menos um item com nome antes de salvar.', true);
+            return;
+        }
+
+        // Valida que todos os tópicos novos têm nome
+        const unnamedTopics = [...menuContainer.querySelectorAll('.topic-name-input')]
+            .filter(inp => !inp.value.trim());
+        if (unnamedTopics.length > 0) {
+            unnamedTopics[0].focus();
+            showMenuFeedback('Preencha o nome de todos os novos tópicos antes de salvar.', true);
+            return;
+        }
 
         try {
             const token = localStorage.getItem('ownerToken');
@@ -414,10 +609,10 @@ if (saveMenuBtn) {
             if (data.success) {
                 showMenuFeedback('Cardápio atualizado com sucesso!');
                 menuModal.classList.remove('editing');
-                
+
                 // Reseta os botões para o estado normal
                 if (editMenuBtn) editMenuBtn.style.display = 'inline-block';
-                
+
                 if (saveMenuBtn) {
                     saveMenuBtn.style.display = 'none';
                     saveMenuBtn.classList.add('display-none');
@@ -426,7 +621,7 @@ if (saveMenuBtn) {
                     cancelEditBtn.style.display = 'none';
                     cancelEditBtn.classList.add('display-none');
                 }
-                
+
                 loadMenu();
             } else {
                 showMenuFeedback('Erro ao salvar: ' + data.message, true);
@@ -718,7 +913,8 @@ function renderGallery(fotos) {
             if (deleteBtn) {
                 deleteBtn.addEventListener('click', async (e) => {
                     e.stopPropagation();
-                    if (!confirm(`Tem certeza que deseja excluir a foto "${foto.titulo}"?`)) return;
+                    const confirmed = await showCustomConfirm(`Tem certeza que deseja excluir a foto "${foto.titulo}"?`);
+                    if (!confirmed) return;
 
                     try {
                         const token = localStorage.getItem('ownerToken');
