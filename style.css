@@ -187,7 +187,7 @@ header {
     margin-left: 0;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
 }
 
 .login-btn {
@@ -239,7 +239,8 @@ header {
 }
 
 .zap-page {
-    padding-top: 8px;
+    display: inline-flex;
+    align-items: center;
 }
 
 .zap-icon {
@@ -253,7 +254,8 @@ header {
 }
 
 .insta-page {
-    padding-top: 8px;
+    display: inline-flex;
+    align-items: center;
 }
 
 .insta-icon {
@@ -1587,16 +1589,26 @@ footer {
 /* ==========================================================================
    14. Desktop & Responsive Override Styles (>= 1024px)
    ========================================================================== */
+header .nav-container {
+    max-width: 1400px;
+    padding: 0 30px;
+}
+
 @media (min-width: 1024px) {
     .hamburger {
         display: none;
     }
 
-    .nav-container {
+    header .nav-container {
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-items: center;
-        gap: 40px;
+        gap: 25px;
+        padding: 0 40px;
+    }
+
+    .logo {
+        justify-self: start;
     }
 
     .nav-links {
@@ -1609,10 +1621,12 @@ footer {
         display: block;
         box-shadow: none;
         justify-self: end;
+        margin-right: 65px;
     }
 
     .nav-right {
         justify-self: end;
+        gap: 20px;
     }
 
     .nav-links ul {
@@ -1633,7 +1647,7 @@ footer {
         letter-spacing: 1px;
         color: var(--dark);
         position: relative;
-        padding: 15px 20px;
+        padding: 15px 18px;
         display: block;
         transition: color 0.3s ease;
     }
@@ -1666,6 +1680,7 @@ footer {
     .nav-links a.active::after {
         width: 100%;
     }
+}
 
     /* Hero Desktop Customization */
     .hero {
@@ -2023,7 +2038,7 @@ input[type="password"]::-webkit-input-password-toggle {
     .nav-right {
         margin-left: 0 !important;
         margin-right: 0 !important;
-        gap: 8px;
+        gap: 12px;
         align-items: center;
         flex-shrink: 0;
     }
