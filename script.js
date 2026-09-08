@@ -4,7 +4,7 @@
  */
 
 let scrollPosition = 0;
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = (window.location.port === '5000') ? '' : 'http://127.0.0.1:5000';
 
 // DOM Elements - Modals & Forms
 const loginModal = document.getElementById('loginModal');

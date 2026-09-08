@@ -39,7 +39,9 @@ CORS(app, supports_credentials=True, origins=[
     "http://127.0.0.1:5500", 
     "http://localhost:5500",
     "http://127.0.0.1:8000",
-    "http://localhost:8000"
+    "http://localhost:8000",
+    "http://127.0.0.1:5000",
+    "http://localhost:5000"
 ])
 
 # Configuração do banco de dados lida exclusivamente a partir do arquivo .env
@@ -411,6 +413,29 @@ def logout():
     """
     session.clear()
     return jsonify({"success": True, "message": "Logout realizado!"}), 200
+
+
+# ==========================================
+# Static Files & Web Page Routes
+# ==========================================
+
+@app.route('/')
+def index():
+    """
+    Serves the main application page.
+    """
+    return send_from_directory(BASE_DIR, 'main.html')
+
+
+@app.route('/<path:filename>')
+def serve_static_files(filename):
+    """
+    Serves static files (HTML, CSS, JS, images) from the project root directory.
+    """
+    target_path = os.path.join(BASE_DIR, filename)
+    if os.path.isfile(target_path):
+        return send_from_directory(BASE_DIR, filename)
+    return send_from_directory(BASE_DIR, 'main.html')
 
 
 # ==========================================
